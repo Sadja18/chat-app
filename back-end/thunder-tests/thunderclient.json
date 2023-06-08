@@ -1,0 +1,59 @@
+[
+  {
+    "_id": "f1c0b538-c7d2-4ae3-b296-51a34d262cbe",
+    "colId": "6cb5bf54-942a-4174-a9e3-733d1015a68c",
+    "containerId": "",
+    "name": "01 - Register",
+    "url": "http://127.0.0.1:8000/api/users/register",
+    "method": "POST",
+    "sortNum": 10000,
+    "created": "2023-06-08T10:43:28.822Z",
+    "modified": "2023-06-08T11:01:15.704Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"userName\": \"user1\",\n  \"email\": \"namanmishra.nm5@gmail.com\",\n  \"password\": \"ssnkdnaman\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "229afe0a-fea2-4d71-8726-646c2bedf5ef",
+    "colId": "6cb5bf54-942a-4174-a9e3-733d1015a68c",
+    "containerId": "",
+    "name": "02 - Login",
+    "url": "http://localhost:8000/api/users/login",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2023-06-08T11:01:06.294Z",
+    "modified": "2023-06-08T11:02:29.748Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"email\": \"namanmishra.nm5@gmail.com\",\n  \"password\": \"ssnkdnaman\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "bad87664-e410-4f9f-b632-13f11bd1558b",
+    "colId": "6cb5bf54-942a-4174-a9e3-733d1015a68c",
+    "containerId": "",
+    "name": "03 - Logout",
+    "url": "http://localhost:8000/api/users/logout",
+    "method": "POST",
+    "sortNum": 30000,
+    "created": "2023-06-08T11:02:51.677Z",
+    "modified": "2023-06-08T11:34:46.214Z",
+    "headers": [
+      {
+        "name": "Authorization",
+        "value": "\"Bearer ca46750812105d2863be1fb9e9708d053afcfebc383658d00ef814fd10f15aeb\""
+      }
+    ],
+    "params": [],
+    "tests": []
+  }
+]
