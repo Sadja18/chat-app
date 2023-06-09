@@ -70,7 +70,7 @@ class UserController extends Controller
      */
     public function logout(Request $request)
     {
-        print($request->user()->currentAccessToken());
+        print($request->user());
         $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Logged out'], 200);

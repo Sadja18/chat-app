@@ -46,11 +46,30 @@
     "method": "POST",
     "sortNum": 30000,
     "created": "2023-06-08T11:02:51.677Z",
-    "modified": "2023-06-08T11:34:46.214Z",
+    "modified": "2023-06-09T05:39:03.999Z",
     "headers": [
       {
         "name": "Authorization",
-        "value": "\"Bearer ca46750812105d2863be1fb9e9708d053afcfebc383658d00ef814fd10f15aeb\""
+        "value": "\"Bearer 7|wFMJabKkb0pJjjxpMMiyTYBlXYuWTlb0R6ZTrhQQ\""
+      }
+    ],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "ba4beb9a-89ca-442f-b6ec-4f86fde24473",
+    "colId": "6cb5bf54-942a-4174-a9e3-733d1015a68c",
+    "containerId": "",
+    "name": "04 - Generate OTP",
+    "url": "localhost:8000/api/users/email/otp",
+    "method": "POST",
+    "sortNum": 40000,
+    "created": "2023-06-09T05:18:21.527Z",
+    "modified": "2023-06-09T05:37:23.651Z",
+    "headers": [
+      {
+        "name": "Authorization",
+        "value": "\"Bearer yuqOzcNeGluiRN7EHeAWJ2oLkq34IAJxaP3r76MR\""
       }
     ],
     "params": [],

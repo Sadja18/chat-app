@@ -1,0 +1,64 @@
+[
+  {
+    "_id": "5bb29c3c-fbda-4eee-9e02-ed0501725382",
+    "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+    "containerId": "",
+    "name": "01 - Register",
+    "url": "localhost:8000/api/register",
+    "method": "POST",
+    "sortNum": 10000,
+    "created": "2023-06-09T06:57:46.569Z",
+    "modified": "2023-06-09T07:03:00.356Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"name\": \"sadja3388\",\n  \"email\": \"namanmishra.nm5@gmail.com\",\n  \"password\": \"ssnkdnaman\",\n  \"confirm_password\": \"ssnkdnaman\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "82cb7589-ac97-4567-a2c9-f1ecf7adbb4f",
+    "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+    "containerId": "",
+    "name": "02 - Generate OTP",
+    "url": "localhost:8000/api/email/otp",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2023-06-09T07:03:34.819Z",
+    "modified": "2023-06-09T07:04:09.830Z",
+    "headers": [
+      {
+        "name": "Authorization",
+        "value": "Bearer 2|W8muX6QzIVkDWLaH93U0rBlQ5vc9ioSAOGpru1Hw"
+      }
+    ],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "6eeb3fd2-dc6f-4bf9-90ff-54f73f1ce5ce",
+    "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+    "containerId": "",
+    "name": "03 - VerifyEmail",
+    "url": "localhost:8000/api/email/verify",
+    "method": "POST",
+    "sortNum": 30000,
+    "created": "2023-06-09T10:26:29.464Z",
+    "modified": "2023-06-09T10:27:53.027Z",
+    "headers": [
+      {
+        "name": "Authorization",
+        "value": "Bearer 2|W8muX6QzIVkDWLaH93U0rBlQ5vc9ioSAOGpru1Hw"
+      }
+    ],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"otp\": \"tHHdq8G\"\n}",
+      "form": []
+    },
+    "tests": []
+  }
+]
