@@ -79,5 +79,24 @@
     ],
     "params": [],
     "tests": []
+  },
+  {
+    "_id": "0e68ce55-a892-4465-996f-b4d172709f46",
+    "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+    "containerId": "",
+    "name": "05 - Update Visibility",
+    "url": "localhost:8000/api/profiles/visibility/update",
+    "method": "PUT",
+    "sortNum": 50000,
+    "created": "2023-06-12T07:36:58.615Z",
+    "modified": "2023-06-12T07:37:51.624Z",
+    "headers": [
+      {
+        "name": "Authorization",
+        "value": "Bearer 2|W8muX6QzIVkDWLaH93U0rBlQ5vc9ioSAOGpru1Hw"
+      }
+    ],
+    "params": [],
+    "tests": []
   }
 ]

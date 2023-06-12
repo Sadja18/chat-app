@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Profiles;
 
 use App\Http\Controllers\Controller;
+use App\Models\VisibilitySettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,12 +18,15 @@ class ProfileController extends Controller
         try {
             $user = Auth::user();
             $profiles = $user->profiles;
+            $visibilitySettings = $user->visibilitySettings;
+
             return response()->json([
                 'message' => 'success',
                 'infoText' => 'Profile retrieved successfully.',
                 'data' => [
                     'username' => $user->name,
-                    'profile' => $profiles
+                    'profile' => $profiles,
+                    'visibility_setting' => $visibilitySettings
                 ]
             ]);
         } catch (\Exception $e) {
@@ -41,6 +45,7 @@ class ProfileController extends Controller
             $user = Auth::user();
 
             $existing_profile = $user->existing_profile;
+            $visibilitySettings = $user->visibilitySettings;
 
             // Check if a profile already exists for the user
             if ($existing_profile) {
@@ -48,7 +53,8 @@ class ProfileController extends Controller
                     'message' => 'Profile already exists',
                     'data' => [
                         'username' => $user->name,
-                        'profile' => $existing_profile
+                        'profile' => $existing_profile,
+                        'visibility' => $visibilitySettings
                     ]
                 ]);
             }
@@ -57,14 +63,14 @@ class ProfileController extends Controller
 
             $profile = $user->profiles()->create($profileData);
 
+            // Create a new visibility setting for the user
+            $visibilitySettings = $user->visibilitySettings()->create();
+
             return response()->json([
-                'message' => 'success',
-                'infoText' => 'Profile created successfully.',
-                'data' => [
-                    'username' => $user->name,
-                    'profile' => $profile,
-                ]
-            ], 201);
+                'message' => 'Profile created successfully',
+                'profile' => $profile,
+                'visibility_setting' => $visibilitySettings
+            ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to create profile'], 500);
         }
@@ -80,6 +86,7 @@ class ProfileController extends Controller
         try {
             $user = $request->user();
             $profile = $user->profile;
+            $visibilitySettings = $user->visibilitySettings;
 
             return response()->json([
                 'message' => 'success',
@@ -87,6 +94,7 @@ class ProfileController extends Controller
                 'data' => [
                     'username' => $user->name,
                     'profile' => $profile,
+                    'visibilitySettings' => $visibilitySettings
                 ]
             ]);
         } catch (\Exception $e) {
@@ -139,6 +147,7 @@ class ProfileController extends Controller
         try {
             $user = $request->user();
             $profile = $user->profile;
+            $visibilitySettings = $user->visibilitySettings;
 
             // Check if a profile exists for the user
             if (!$profile) {
@@ -148,6 +157,10 @@ class ProfileController extends Controller
             }
 
             $profile->delete();
+
+            if ($visibilitySettings) {
+                $visibilitySettings->delete();
+            }
 
             return response()->json([
                 'message' => 'Profile deleted successfully',

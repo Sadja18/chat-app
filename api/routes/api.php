@@ -3,6 +3,7 @@
 use App\Http\Controllers\Accounts\RegisterController;
 use App\Http\Controllers\OTP\OTPController;
 use App\Http\Controllers\Profiles\ProfileController;
+use App\Http\Controllers\Profiles\VisibilityController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Routing\Middleware\ThrottleRequests;
@@ -47,4 +48,6 @@ Route::prefix('profiles')->middleware('auth:sanctum')->group(function () {
 
     Route::get('/online-status', [ProfileController::class, 'getOnlineStatus']);
     Route::put('/online-status', [ProfileController::class, 'updateOnlineStatus']);
+
+    Route::put('/visibility/update', [VisibilityController::class, 'update']);
 });
