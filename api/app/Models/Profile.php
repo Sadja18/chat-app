@@ -9,7 +9,7 @@ class Profile extends Model
 {
     use HasFactory;
 
-    protected $table = 'profiles';
+    protected $table = 'profile';
 
     protected $fillable = [
         'user_id',
@@ -17,7 +17,8 @@ class Profile extends Model
         'last_name',
         'contact_phone',
         'country',
-        'profile_pic'
+        'profile_pic',
+        'online_status'
     ];
 
     // Define the relationship with the User model

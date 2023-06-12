@@ -60,5 +60,24 @@
       "form": []
     },
     "tests": []
+  },
+  {
+    "_id": "2fa526d4-50ce-436c-939f-b6eafd050dfd",
+    "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+    "containerId": "",
+    "name": "04 - Get Profile",
+    "url": "http://localhost:8000/api/profiles/",
+    "method": "GET",
+    "sortNum": 40000,
+    "created": "2023-06-12T05:32:36.114Z",
+    "modified": "2023-06-12T05:33:51.465Z",
+    "headers": [
+      {
+        "name": "Authorization",
+        "value": "Bearer 2|W8muX6QzIVkDWLaH93U0rBlQ5vc9ioSAOGpru1Hw"
+      }
+    ],
+    "params": [],
+    "tests": []
   }
 ]
