@@ -9,7 +9,11 @@ class VisibilitySettings extends Model
 {
     use HasFactory;
 
+    protected $table = 'visibility_settings';
+
+
     protected $fillable = [
+        'user_id',
         'hide_first_name',
         'hide_last_name',
         'hide_country',

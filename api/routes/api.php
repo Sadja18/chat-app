@@ -41,7 +41,7 @@ Route::middleware([ThrottleRequests::class . ':5,1'])->group(function () {
 
 Route::prefix('profiles')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [ProfileController::class, 'index']);
-    Route::post('/', [ProfileController::class, 'store']);
+    Route::post('/store', [ProfileController::class, 'store']);
     Route::get('/show', [ProfileController::class, 'show']);
     Route::put('/update', [ProfileController::class, 'update']);
     Route::delete('/delete', [ProfileController::class, 'destroy']);
@@ -49,5 +49,5 @@ Route::prefix('profiles')->middleware('auth:sanctum')->group(function () {
     Route::get('/online-status', [ProfileController::class, 'getOnlineStatus']);
     Route::put('/online-status', [ProfileController::class, 'updateOnlineStatus']);
 
-    Route::put('/visibility/update', [VisibilityController::class, 'update']);
+    Route::get('/visibility/get', [VisibilityController::class, 'get']);
 });

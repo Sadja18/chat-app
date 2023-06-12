@@ -9,12 +9,43 @@ use Illuminate\Support\Facades\Auth;
 class VisibilityController extends Controller
 {
     //
-    public function update(Request $request)
+    public function get(Request $request)
     {
-        $user = Auth::user();
+        try {
+            $user = $request->user();
+            $visibilitySetting = $user->visibilitySetting;
 
-        $visibility_setting = $user->visibilitySettings;
+            return response()->json([
+                'message' => 'success',
+                'visibility' => $visibilitySetting,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to retrieve visibility settings'], 500);
+        }
+    }
 
-        return response()->json($visibility_setting);
+    public function updateVisibility(Request $request)
+    {
+        try {
+            $user = $request->user();
+            $visibilitySetting = $user->visibilitySetting;
+
+            $visibilityData = $request->only([
+                'hide_first_name',
+                'hide_last_name',
+                'hide_country',
+                'hide_profile_pic',
+                'hide_contact_phone',
+                'hide_online_status'
+            ]);
+
+            $visibilitySetting->update($visibilityData);
+
+            return response()->json([
+                'message' => 'Visibility settings updated successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to update visibility settings'], 500);
+        }
     }
 }

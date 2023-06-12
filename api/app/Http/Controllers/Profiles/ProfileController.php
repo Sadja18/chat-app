@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Profiles;
 
 use App\Http\Controllers\Controller;
+use App\Models\Profile;
 use App\Models\VisibilitySettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,18 +18,48 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
-            $profiles = $user->profiles;
-            $visibilitySettings = $user->visibilitySettings;
+            // Check if the user already has a profile
+            $existingProfile = Profile::where('user_id', $user->id)->exists();
+            // Check if the user already has a profile
+            $visibilitySettings = VisibilitySettings::where('user_id', $user->id)->exists();
 
-            return response()->json([
-                'message' => 'success',
-                'infoText' => 'Profile retrieved successfully.',
-                'data' => [
-                    'username' => $user->name,
-                    'profile' => $profiles,
-                    'visibility_setting' => $visibilitySettings
-                ]
-            ]);
+            if ($existingProfile) {
+                $existingProfile = Profile::where('user_id', $user->id)->first();
+
+                if ($visibilitySettings) {
+                    $visibilitySettings = VisibilitySettings::where('user_id', $user->id)->first();
+                    return response()->json([
+                        'message' => 'success',
+                        'infoText' => 'Profile retrieved successfully.',
+                        'data' => [
+                            'username' => $user->name,
+                            'profile' => $existingProfile,
+                            'visibility_setting' => $visibilitySettings
+                        ]
+                    ]);
+                } else {
+                    return response()->json([
+                        'message' => 'success',
+                        'infoText' => 'Profile retrieved successfully.',
+                        'data' => [
+                            'username' => $user->name,
+                            'profile' => $existingProfile,
+                            'visibility_setting' => $visibilitySettings
+                        ]
+                    ]);
+                }
+
+            } else {
+                return response()->json([
+                    'message' => 'success',
+                    'infoText' => 'Profile retrieved successfully.',
+                    'data' => [
+                        'username' => $user->name,
+                        'profile' => $existingProfile,
+                        'visibility_setting' => $visibilitySettings
+                    ]
+                ]);
+            }
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to retrieve profiles'], 500);
         }
@@ -42,13 +73,22 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         try {
+            info("Auth user checking");
             $user = Auth::user();
 
-            $existing_profile = $user->existing_profile;
-            $visibilitySettings = $user->visibilitySettings;
+            // info("$user ', $user->i");
+            $user_id = $user->id;
+
+            // Check if the user already has a profile
+            $profileExists = Profile::where('user_id', $user_id)->exists();
+            // Check if the user already has a profile
+            $visibilityExists = VisibilitySettings::where('user_id', $user_id)->exists();
 
             // Check if a profile already exists for the user
-            if ($existing_profile) {
+            if ($profileExists && $visibilityExists) {
+                // both profile and visibility settings exists
+                $existing_profile = Profile::where('user_id', $user_id)->first();
+                $visibilitySettings = VisibilitySettings::where('user_id', $user_id)->first();
                 return response()->json([
                     'message' => 'Profile already exists',
                     'data' => [
@@ -57,22 +97,170 @@ class ProfileController extends Controller
                         'visibility' => $visibilitySettings
                     ]
                 ]);
+            } else if (!$profileExists && !$visibilityExists) {
+                // neither profile nor visibility settings exists
+
+                // create profile
+                $profileData = $request->only([
+                    "first_name",
+                    "last_name",
+                    "contact_phone",
+                    "country",
+                    "profile_pic",
+                    "online_status"
+                ]);
+                info('reqyest');
+
+                info($profileData);
+
+                if (array_key_exists('online_status', $profileData)) {
+                    $profileData['online_status'] = $profileData['online_status'] ? true : false;
+                } else {
+                    $profileData['online_status'] = 0;
+                }
+
+                if (array_key_exists('profile_pic', $profileData)) {
+                    $profileData['profile_pic'] = empty($profileData['profile_pic']) ? null : $profileData['profile_pic'];
+                } else {
+                    $profileData['profile_pic'] = 0;
+                }
+
+                $profileData['user_id'] = $user_id;
+
+                info("profile_data");
+
+                $profile = Profile::create($profileData);
+
+                info("profile $profile");
+
+                $profile->save();
+
+                info('profile saved');
+
+                $visibilityData = [
+                    'user_id' => $user_id,
+                    'hide_first_name' => false,
+                    'hide_last_name' => false,
+                    'hide_country' => false,
+                    'hide_profile_pic' => false,
+                    'hide_contact_phone' => false,
+                    'hide_online_status' => false
+                ];
+
+                info('$visibilityData');
+
+                // create visibility settings
+                $visibilitySettings = VisibilitySettings::create($visibilityData);
+
+                info($visibilitySettings);
+
+                $visibilitySettings->save();
+
+                return response()->json([
+                    'message' => 'Profile created successfully',
+                    'profile' => $profileExists,
+                    'visibility_setting' => $visibilityExists
+                ]);
+
+            } else if ($profileExists && !$visibilityExists) {
+                // profile exists but not visitibility settings
+
+                // get profile
+                $profile = Profile::where('user_id', $user_id)->first();
+
+                info('profile exists, creating visibility');
+                info($profile);
+
+                $userId = Auth::id(); // Retrieve the authenticated user's ID
+                $visibilityData = [
+                    'user_id' => $userId,
+                    'hide_first_name' => false,
+                    'hide_last_name' => false,
+                    'hide_country' => false,
+                    'hide_profile_pic' => false,
+                    'hide_contact_phone' => false,
+                    'hide_online_status' => false
+                ];
+
+                info('$visibilityData');
+
+                // create visibility settings
+                $visibilitySettings = VisibilitySettings::create($visibilityData);
+
+                info($visibilitySettings);
+
+                $visibilitySettings->save();
+
+                return response()->json([
+                    'message' => 'Profile created successfully',
+                    'profile' => $profile,
+                    'visibility_setting' => $visibilitySettings
+                ]);
+
+            } else {
+                // profile does not exists but visibility settings exist
+
+                // create profile
+                $profileData = $request->only([
+                    "first_name",
+                    "last_name",
+                    "contact_phone",
+                    "country",
+                    "profile_pic",
+                    "online_status"
+                ]);
+                info('reqyest');
+
+                if (array_key_exists('online_status', $profileData)) {
+                    $profileData['online_status'] = $profileData['online_status'] ? true : false;
+                } else {
+                    $profileData['online_status'] = 0;
+                }
+
+                if (array_key_exists('profile_pic', $profileData)) {
+                    $profileData['profile_pic'] = empty($profileData['profile_pic']) ? null : $profileData['profile_pic'];
+                } else {
+                    $profileData['profile_pic'] = 0;
+                }
+
+                $profileData['user_id'] = $user_id;
+
+                info("profile_data");
+
+                $profile = Profile::create($profileData);
+
+                info("profile $profile");
+
+                $profile->save();
+
+                info('profile saved');
+
+                $profileData['user_id'] = $user_id;
+
+                info("profile_data");
+
+                $profile = Profile::create($profileData);
+
+                info("profile $profile");
+
+                // get visibility settings:
+
+                $visibilitySettings = VisibilitySettings::where('user_id', $user_id)->first();
+
+                return response()->json([
+                    'message' => 'Profile created successfully',
+                    'profile' => $profile,
+                    'visibility_setting' => $visibilitySettings
+                ]);
+
             }
 
-            $profileData = $request->only(['first_name', 'last_name', 'country', 'contact_phone', 'profile_pic']);
-
-            $profile = $user->profiles()->create($profileData);
-
-            // Create a new visibility setting for the user
-            $visibilitySettings = $user->visibilitySettings()->create();
-
-            return response()->json([
-                'message' => 'Profile created successfully',
-                'profile' => $profile,
-                'visibility_setting' => $visibilitySettings
-            ]);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to create profile'], 500);
+            info($e->getTraceAsString());
+            return response()->json([
+                'message' => 'Failed to create profile',
+                'error' => $e->getMessage(),
+            ], 500);
         }
     }
 

@@ -84,12 +84,12 @@
     "_id": "0e68ce55-a892-4465-996f-b4d172709f46",
     "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
     "containerId": "",
-    "name": "05 - Update Visibility",
-    "url": "localhost:8000/api/profiles/visibility/update",
-    "method": "PUT",
+    "name": "05 -Get Visibility",
+    "url": "localhost:8000/api/profiles/visibility/get",
+    "method": "GET",
     "sortNum": 50000,
     "created": "2023-06-12T07:36:58.615Z",
-    "modified": "2023-06-12T07:37:51.624Z",
+    "modified": "2023-06-12T09:07:40.428Z",
     "headers": [
       {
         "name": "Authorization",
@@ -97,6 +97,30 @@
       }
     ],
     "params": [],
+    "tests": []
+  },
+  {
+    "_id": "edc48c0c-c2e7-4cd5-97dc-5d9ed69e830b",
+    "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+    "containerId": "",
+    "name": "06 - Create Profile",
+    "url": "localhost:8000/api/profiles/store",
+    "method": "POST",
+    "sortNum": 60000,
+    "created": "2023-06-12T09:08:07.198Z",
+    "modified": "2023-06-12T09:39:37.674Z",
+    "headers": [
+      {
+        "name": "Authorization",
+        "value": "Bearer 2|W8muX6QzIVkDWLaH93U0rBlQ5vc9ioSAOGpru1Hw"
+      }
+    ],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"first_name\": \"naman\",\n  \"last_name\": \"mishra\",\n  \"country\": \"India\",\n  \"contact_phone\": \"+91-77207897914\",\n  \"profile_pic\": \"\",\n  \"online_status\": false\n}",
+      "form": []
+    },
     "tests": []
   }
 ]
