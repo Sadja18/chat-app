@@ -15,6 +15,10 @@ class VisibilityController extends Controller
             $user = $request->user();
             $visibilitySetting = $user->visibilitySetting;
 
+            if (!$visibilitySetting) {
+                return response()->json(['message' => 'Settings not found'], 404);
+            }
+
             return response()->json([
                 'message' => 'success',
                 'visibility' => $visibilitySetting,

@@ -272,9 +272,15 @@ class ProfileController extends Controller
     public function show(Request $request)
     {
         try {
-            $user = $request->user();
-            $profile = $user->profile;
-            $visibilitySettings = $user->visibilitySettings;
+            $user = Auth::user();
+            $profile = Profile::where('user_id', $user->id)->first();
+            $visibilitySettings = VisibilitySettings::where('user_id', $user->id)->first();
+
+            if (!$profile) {
+                return response()->json([
+                    'message' => 'Profile does not exist',
+                ], 404);
+            }
 
             return response()->json([
                 'message' => 'success',
@@ -298,8 +304,8 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         try {
-            $user = $request->user();
-            $profile = $user->profile;
+            $user = Auth::user();
+            $profile = Profile::where('user_id', $user->id)->first();
 
             // Check if a profile exists for the user
             if (!$profile) {
@@ -308,15 +314,18 @@ class ProfileController extends Controller
                 ], 404);
             }
 
-            $profileData = $request->only(['first_name', 'last_name', 'country', 'contact_phone', 'profile_pic']);
-            $profile->update($profileData);
+            $field = $request->input('field');
+            $value = $request->input('value');
+
+            // Update the specified field
+            $this->updateProfileField($profile, $field, $value);
 
             return response()->json([
                 'message' => 'Profile updated successfully',
                 'data' => [
                     'username' => $user->name,
-                    'profile' => $profile
-                ]
+                    'profile' => $profile->refresh(),
+                ],
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -324,6 +333,39 @@ class ProfileController extends Controller
             ], 500);
         }
     }
+
+    private function updateProfileField(Profile $profile, $field, $value)
+    {
+        switch ($field) {
+            case 'first_name':
+                $profile->first_name = $value;
+                break;
+            case 'last_name':
+                $profile->last_name = $value;
+                break;
+            case 'country':
+                $profile->country = $value;
+                break;
+            case 'contact_phone':
+                $profile->contact_phone = $value;
+                break;
+            case 'profile_pic':
+                $profile->profile_pic = $value;
+                break;
+            case 'online_status':
+                $profile->online_status = $value;
+                break;
+            default:
+                // Handle any other fields or validation
+                return response()->json([
+                    'message' => 'Invalid field name',
+                ], 400);
+        }
+
+        $profile->save();
+    }
+
+
 
     /**
      * Summary of destroy
@@ -333,9 +375,9 @@ class ProfileController extends Controller
     public function destroy(Request $request)
     {
         try {
-            $user = $request->user();
-            $profile = $user->profile;
-            $visibilitySettings = $user->visibilitySettings;
+            $user = Auth::user();
+            $profile = Profile::where('user_id', $user->id)->first();
+            $visibilitySettings = VisibilitySettings::where('user_id', $user->id)->first();
 
             // Check if a profile exists for the user
             if (!$profile) {
@@ -371,8 +413,20 @@ class ProfileController extends Controller
     public function getOnlineStatus(Request $request)
     {
         try {
-            $user = $request->user();
-            $onlineStatus = $user->profile ? $user->profile->online_status : false;
+            $user = Auth::user();
+            // $onlineStatus = $user->profile ? $user->profile->online_status : false;
+            $profile = Profile::where('user_id', $user->id)->first();
+
+            if (!$profile) {
+                return response()->json(
+                    [
+                        'message' => 'Profile does not exists'
+                    ],
+                    404
+                );
+            }
+
+            $onlineStatus = $profile->online_status;
 
             return response()->json([
                 'message' => 'Online status retrieved successfully',
@@ -393,8 +447,8 @@ class ProfileController extends Controller
     public function updateOnlineStatus(Request $request)
     {
         try {
-            $user = $request->user();
-            $profile = $user->profile;
+            $user = Auth::user();
+            $profile = Profile::where('user_id', $user->id)->first();
 
             // Check if a profile exists for the user
             if (!$profile) {
