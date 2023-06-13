@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ui/screens/first_screen.dart';
+import 'package:ui/screens/search_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,6 +8,12 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  Widget widgetReturner() {
+    return FutureBuilder(builder: (BuildContext ctx, AsyncSnapshot snap) {
+      return const SearchScreen();
+    });
+  }
 
   // This widget is the root of your application.
   @override
@@ -18,7 +25,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const FirstScreen(),
+        '/': (context) => widgetReturner(),
       },
     );
   }
