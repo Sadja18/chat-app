@@ -45,12 +45,12 @@ class User extends Authenticatable
 
     public function profile()
     {
-        return $this->hasOne(Profile::class);
+        return $this->hasOne(Profile::class, 'user_id');
     }
 
     public function profileVisibility()
     {
-        return $this->hasOne(VisibilitySettings::class);
+        return $this->hasOne(VisibilitySettings::class, 'user_id');
     }
 
     public function sentConversations()

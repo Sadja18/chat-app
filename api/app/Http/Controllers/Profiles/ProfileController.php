@@ -24,10 +24,12 @@ class ProfileController extends Controller
             $visibilitySettings = VisibilitySettings::where('user_id', $user->id)->exists();
 
             if ($existingProfile) {
-                $existingProfile = Profile::where('user_id', $user->id)->first();
+                // $existingProfile = Profile::where('user_id', $user->id)->first();
+                $existingProfile = $user->profile;
+
 
                 if ($visibilitySettings) {
-                    $visibilitySettings = VisibilitySettings::where('user_id', $user->id)->first();
+                    $visibilitySettings = $user->profileVisibility;
                     return response()->json([
                         'message' => 'success',
                         'infoText' => 'Profile retrieved successfully.',
