@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:ui/services/api/get.dart';
-import 'package:ui/widgets/search_users_results.dart';
+import 'package:ui/widgets/components/search_users_result_item.dart';
 
 class SearchScreen extends StatefulWidget {
   static const routeName = '/search-screen';
@@ -53,57 +53,54 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-    final maxHeight = MediaQuery.of(context).size.height * 0.70;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search Users'),
+    final maxHeight = MediaQuery.of(context).size.height * 0.60;
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.90,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      decoration: const BoxDecoration(
+        color: Colors.amberAccent,
+        backgroundBlendMode: BlendMode.colorBurn,
       ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.90,
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-        decoration: const BoxDecoration(
-            color: Colors.amberAccent,
-            backgroundBlendMode: BlendMode.colorBurn),
-        child: Container(
-          alignment: Alignment.topCenter,
-          width: MediaQuery.of(context).size.width * 0.90,
-          margin: const EdgeInsetsDirectional.fromSTEB(4.0, 5.0, 5.0, 4.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              TextField(
-                controller: _searchController,
-                onChanged: _onSearchTextChange,
-                decoration: InputDecoration(
-                  hintText: 'Search...',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      // Perform search logic here
-                      String searchQuery = _searchController.text;
-                      if (kDebugMode) {
-                        log('Search Query: $searchQuery');
-                      }
-                      FocusScope.of(context).unfocus();
-                    },
-                  ),
+      child: Container(
+        alignment: Alignment.topCenter,
+        width: MediaQuery.of(context).size.width * 0.90,
+        margin: const EdgeInsetsDirectional.fromSTEB(4.0, 5.0, 5.0, 4.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            TextField(
+              controller: _searchController,
+              onChanged: _onSearchTextChange,
+              decoration: InputDecoration(
+                hintText: 'Search...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    // Perform search logic here
+                    String searchQuery = _searchController.text;
+                    if (kDebugMode) {
+                      log('Search Query: $searchQuery');
+                    }
+                    FocusScope.of(context).unfocus();
+                    _onSearchTextChange(searchQuery);
+                  },
                 ),
               ),
-              // show search results as scrollviewchild here
-              UserNameSearchResultsWidget(
-                height: maxHeight -
-                    keyboardHeight -
-                    kToolbarHeight -
-                    MediaQuery.of(context).padding.top,
-                searchResults: _searchResults,
-              ),
-            ],
-          ),
+            ),
+            // show search results as scrollviewchild here
+            UserNameSearchResultsWidget(
+              height: maxHeight -
+                  keyboardHeight -
+                  kToolbarHeight -
+                  MediaQuery.of(context).padding.top,
+              searchResults: _searchResults,
+            ),
+          ],
         ),
       ),
     );

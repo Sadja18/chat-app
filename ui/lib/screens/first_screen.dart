@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ui/widgets/login.dart';
-import 'package:ui/widgets/register.dart';
+import 'package:ui/widgets/components/login.dart';
+import 'package:ui/widgets/components/register.dart';
 // import 'package:flutter/src/widgets/framework.dart';
 
 class FirstScreen extends StatelessWidget {
@@ -45,8 +45,8 @@ class FirstScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: LoginWidget(),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: RegisterWidget(),
             ),
           ],

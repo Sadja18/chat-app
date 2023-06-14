@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ui/screens/first_screen.dart';
-import 'package:ui/screens/search_screen.dart';
+import 'package:ui/screens/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +10,7 @@ class MyApp extends StatelessWidget {
 
   Widget widgetReturner() {
     return FutureBuilder(builder: (BuildContext ctx, AsyncSnapshot snap) {
-      return const SearchScreen();
+      return const HomeScreen();
     });
   }
 
@@ -26,6 +25,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => widgetReturner(),
+        HomeScreen.routeName: (context) => const HomeScreen()
       },
     );
   }
