@@ -122,5 +122,24 @@
       "form": []
     },
     "tests": []
+  },
+  {
+    "_id": "753e3082-9fa1-4b3d-b6f2-c3a257ca8691",
+    "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+    "containerId": "",
+    "name": "07 - Get Online Status",
+    "url": "http://localhost:8000/api/profiles/online-status",
+    "method": "GET",
+    "sortNum": 70000,
+    "created": "2023-06-14T11:43:29.158Z",
+    "modified": "2023-06-14T11:44:23.117Z",
+    "headers": [
+      {
+        "name": "Authorization",
+        "value": "Bearer 2|W8muX6QzIVkDWLaH93U0rBlQ5vc9ioSAOGpru1Hw"
+      }
+    ],
+    "params": [],
+    "tests": []
   }
 ]

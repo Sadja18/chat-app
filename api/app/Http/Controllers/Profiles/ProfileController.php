@@ -19,17 +19,16 @@ class ProfileController extends Controller
         try {
             $user = Auth::user();
             // Check if the user already has a profile
-            $existingProfile = Profile::where('user_id', $user->id)->exists();
+            $existingProfile = $user->profile;
             // Check if the user already has a profile
-            $visibilitySettings = VisibilitySettings::where('user_id', $user->id)->exists();
+            $visibilitySettings = $user->profileVisibility;
+
 
             if ($existingProfile) {
                 // $existingProfile = Profile::where('user_id', $user->id)->first();
-                $existingProfile = $user->profile;
-
 
                 if ($visibilitySettings) {
-                    $visibilitySettings = $user->profileVisibility;
+                    // $visibilitySettings = $user->profileVisibility;
                     return response()->json([
                         'message' => 'success',
                         'infoText' => 'Profile retrieved successfully.',
@@ -275,8 +274,8 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
-            $profile = Profile::where('user_id', $user->id)->first();
-            $visibilitySettings = VisibilitySettings::where('user_id', $user->id)->first();
+            $profile = $user->profile;
+            $visibilitySettings = $user->profileVisibility;
 
             if (!$profile) {
                 return response()->json([
@@ -367,8 +366,6 @@ class ProfileController extends Controller
         $profile->save();
     }
 
-
-
     /**
      * Summary of destroy
      * @param \Illuminate\Http\Request $request
@@ -417,7 +414,7 @@ class ProfileController extends Controller
         try {
             $user = Auth::user();
             // $onlineStatus = $user->profile ? $user->profile->online_status : false;
-            $profile = Profile::where('user_id', $user->id)->first();
+            $profile = $user->profile;
 
             if (!$profile) {
                 return response()->json(
@@ -432,7 +429,9 @@ class ProfileController extends Controller
 
             return response()->json([
                 'message' => 'Online status retrieved successfully',
-                'data' => $onlineStatus,
+                'data' => [
+                    'is_online' => $onlineStatus == 0 ? false : true,
+                ],
             ]);
         } catch (\Exception $e) {
             return response()->json([
