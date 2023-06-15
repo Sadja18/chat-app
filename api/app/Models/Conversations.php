@@ -11,13 +11,17 @@ class Conversations extends Model
 
     protected $table = 'conversations';
 
+    protected $casts = [
+        'participants' => 'array',
+    ];
+
     protected $fillable = [
         'participants'
     ];
 
     public function messages()
     {
-        return $this->hasMany(Message::class);
+        return $this->hasMany(Messages::class, 'conversation_id');
     }
 
 }

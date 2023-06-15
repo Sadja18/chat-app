@@ -141,5 +141,29 @@
     ],
     "params": [],
     "tests": []
+  },
+  {
+    "_id": "1a46037a-cc61-4255-9faf-35b34dbe665e",
+    "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+    "containerId": "",
+    "name": "08 - Send Chat Message",
+    "url": "localhost:8000/api/chats/send-message",
+    "method": "POST",
+    "sortNum": 80000,
+    "created": "2023-06-15T09:36:10.906Z",
+    "modified": "2023-06-15T09:37:32.858Z",
+    "headers": [
+      {
+        "name": "Authorization",
+        "value": "Bearer 2|W8muX6QzIVkDWLaH93U0rBlQ5vc9ioSAOGpru1Hw"
+      }
+    ],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"type\": \"text\",\n  \"content\": \"Hello, User 2! This is a test message.\",\n  \"destination\": \"sadja123\"\n}\n",
+      "form": []
+    },
+    "tests": []
   }
 ]

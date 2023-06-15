@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Accounts\RegisterController;
+use App\Http\Controllers\Chats\ChatController;
 use App\Http\Controllers\OTP\OTPController;
 use App\Http\Controllers\Profiles\ProfileController;
 use App\Http\Controllers\Profiles\VisibilityController;
@@ -50,4 +51,8 @@ Route::prefix('profiles')->middleware('auth:sanctum')->group(function () {
     Route::put('/online-status', [ProfileController::class, 'updateOnlineStatus']);
 
     Route::get('/visibility/get', [VisibilityController::class, 'get']);
+});
+
+Route::prefix('chats')->middleware('auth:sanctum')->group(function () {
+    Route::post('/send-message', [ChatController::class, 'sendMessage']);
 });
