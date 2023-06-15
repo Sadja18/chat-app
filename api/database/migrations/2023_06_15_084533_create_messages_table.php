@@ -13,12 +13,12 @@ return new class extends Migration {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('conversation_id');
-            $table->enum('type', ['text', 'file', 'image', 'video']);
-            $table->text('content')->nullable();
+            $table->string('type');
+            $table->text('content');
+            $table->string('message_delivery_status');
+            $table->unsignedInteger('sequence_id')->nullable();
             $table->timestamps();
-            $table->enum('message_delivery_status', ['sent', 'received', 'read'])->default('sent');
 
-            // Add foreign key constraint for conversation_id
             $table->foreign('conversation_id')->references('id')->on('conversations')->onDelete('cascade');
         });
     }

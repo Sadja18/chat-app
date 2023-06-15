@@ -15,7 +15,8 @@ class Messages extends Model
         'conversation_id',
         'type',
         'content',
-        'message_delivery_status'
+        'message_delivery_status',
+        'sequence_id'
     ];
 
     public function conversation()

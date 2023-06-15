@@ -12,18 +12,12 @@ class Conversations extends Model
     protected $table = 'conversations';
 
     protected $fillable = [
-        'sender_user_id',
-        'receiver_user_id'
+        'participants'
     ];
 
     public function messages()
     {
         return $this->hasMany(Message::class);
-    }
-
-    public function sender()
-    {
-        return $this->belongsTo(User::class);
     }
 
 }

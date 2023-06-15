@@ -12,14 +12,8 @@ return new class extends Migration {
     {
         Schema::create('conversations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sender_user_id');
-            $table->unsignedBigInteger('receiver_user_id');
+            $table->json('participants')->nullable();
             $table->timestamps();
-
-            $table->foreign('sender_user_id')->references('id')->on('users')->onDelete('cascade');
-
-            $table->foreign('receiver_user_id')->references('id')->on('users')->onDelete('cascade');
-
         });
     }
 
