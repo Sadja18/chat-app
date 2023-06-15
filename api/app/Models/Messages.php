@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use BeyondCode\LaravelWebSockets\WebSockets\Channels\PrivateChannel;
+use BeyondCode\LaravelWebSockets\WebSockets\Channels\PresenceChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Messages extends Model
+class Messages extends Model implements ShouldBroadcastNow
 {
     use HasFactory;
 
@@ -23,5 +26,20 @@ class Messages extends Model
     public function conversation()
     {
         return $this->belongsTo(Conversation::class);
+    }
+
+    public function broadcastOn()
+    {
+        return new PrivateChannel('messages.' . $this->conversation_id);
+    }
+
+    public function broadcastWith()
+    {
+        return [
+            'id' => $this->id,
+            'content' => $this->content,
+            'sender' => $this->sender,
+            // Include any other relevant data
+        ];
     }
 }

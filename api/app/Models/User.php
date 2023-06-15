@@ -62,4 +62,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Conversation::class, 'receiver_user_id');
     }
+
+    public function canAccessConversation($conversationId)
+    {
+        // Retrieve the conversation from the database
+        $conversation = Conversations::find($conversationId);
+
+        if ($conversation) {
+            // Check if the user is authenticated and matches any of the participants in the conversation
+            if ($conversation->participants->contains('id', $this->id)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

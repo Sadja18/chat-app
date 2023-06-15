@@ -27,11 +27,11 @@
     "method": "POST",
     "sortNum": 20000,
     "created": "2023-06-09T07:03:34.819Z",
-    "modified": "2023-06-09T07:04:09.830Z",
+    "modified": "2023-06-15T11:24:45.384Z",
     "headers": [
       {
         "name": "Authorization",
-        "value": "Bearer 2|W8muX6QzIVkDWLaH93U0rBlQ5vc9ioSAOGpru1Hw"
+        "value": "Bearer 3|0ponfFb6kWJWpsSzdZoI4eMaoZKvigzeyLXDmSFj"
       }
     ],
     "params": [],
@@ -46,17 +46,17 @@
     "method": "POST",
     "sortNum": 30000,
     "created": "2023-06-09T10:26:29.464Z",
-    "modified": "2023-06-09T10:27:53.027Z",
+    "modified": "2023-06-15T11:25:45.780Z",
     "headers": [
       {
         "name": "Authorization",
-        "value": "Bearer 2|W8muX6QzIVkDWLaH93U0rBlQ5vc9ioSAOGpru1Hw"
+        "value": "Bearer 3|0ponfFb6kWJWpsSzdZoI4eMaoZKvigzeyLXDmSFj"
       }
     ],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"otp\": \"tHHdq8G\"\n}",
+      "raw": "{\n  \"otp\": \"rm7eT69\"\n}",
       "form": []
     },
     "tests": []
@@ -181,6 +181,25 @@
     "body": {
       "type": "json",
       "raw": "{\n  \"email\": \"namanmishraec1045@gmail.com\",\n  \"newPassword\": \"sadja123\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "152e919b-d36c-4f1d-8d3b-d128441c3b59",
+    "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+    "containerId": "",
+    "name": "09 - Login",
+    "url": "localhost:8000/api/login",
+    "method": "POST",
+    "sortNum": 100000,
+    "created": "2023-06-15T11:19:41.800Z",
+    "modified": "2023-06-15T11:21:43.318Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"email\": \"namanmishraec1045@gmail.com\",\n  \"password\": \"sadja123\"\n}",
       "form": []
     },
     "tests": []
