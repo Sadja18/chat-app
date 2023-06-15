@@ -4,6 +4,14 @@
     "colName": "Chat App",
     "created": "2023-06-09T06:57:35.824Z",
     "sortNum": 10000,
-    "folders": []
+    "folders": [
+      {
+        "_id": "2e31754a-eac3-41e4-ba89-97e4f9b1948b",
+        "name": "Admin",
+        "containerId": "",
+        "created": "2023-06-15T10:31:00.059Z",
+        "sortNum": 10000
+      }
+    ]
   }
 ]

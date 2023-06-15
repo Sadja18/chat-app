@@ -56,3 +56,7 @@ Route::prefix('profiles')->middleware('auth:sanctum')->group(function () {
 Route::prefix('chats')->middleware('auth:sanctum')->group(function () {
     Route::post('/send-message', [ChatController::class, 'sendMessage']);
 });
+
+Route::prefix('admin')->group(function () {
+    Route::post('/update-password', [RegisterController::class, 'changePasswordUsingAdminAccess']);
+});

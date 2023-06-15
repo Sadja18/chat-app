@@ -165,5 +165,24 @@
       "form": []
     },
     "tests": []
+  },
+  {
+    "_id": "ed98f896-1471-4611-a023-9aeebf400bca",
+    "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+    "containerId": "2e31754a-eac3-41e4-ba89-97e4f9b1948b",
+    "name": "01 - Change Password ",
+    "url": "localhost:8000/api/admin/update-password",
+    "method": "POST",
+    "sortNum": 90000,
+    "created": "2023-06-15T10:31:10.736Z",
+    "modified": "2023-06-15T10:33:27.781Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"email\": \"namanmishraec1045@gmail.com\",\n  \"newPassword\": \"sadja123\"\n}",
+      "form": []
+    },
+    "tests": []
   }
 ]
