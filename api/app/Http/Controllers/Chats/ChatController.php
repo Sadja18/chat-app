@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Conversations;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -29,7 +30,7 @@ class ChatController extends Controller
                 return response()->json(['errors' => $validator->errors()], 400);
             }
 
-            $senderId = auth()->user()->id;
+            $senderId = Auth::user()->id;
             $recipient = User::where('name', $request->input('destination'))->first();
 
             info('recipient');
@@ -78,6 +79,45 @@ class ChatController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
 
+
+    public function getMessage(Request $request)
+    {
+        try {
+            //code...
+            $user = Auth::user();
+
+            $validator = Validator::make($request->all(), [
+                'conversation_id' => 'required|int',
+                'limit' => 'required|int',
+                'offset' => 'required|int'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors()], 400);
+            }
+
+            $conversationId = $request->input('conversation_id');
+            $limit = $request->input('limit');
+            $offset = $request->input('offset');
+
+            $messages = Messages::where('conversation_id', $conversationId)
+                ->orderBy('created_at', 'desc')
+                ->limit($limit)
+                ->offset($offset)
+                ->get();
+
+            if ($messages->isEmpty()) {
+                return response()->json(['message' => 'No messages found for the conversation.'], 404);
+            }
+
+            return response()->json(['messages' => $messages], 200);
+
+        } catch (ValidationException $e) {
+            return response()->json(['error' => $e->errors()], 400);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }

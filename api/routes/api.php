@@ -55,6 +55,7 @@ Route::prefix('profiles')->middleware('auth:sanctum')->group(function () {
 
 Route::prefix('chats')->middleware('auth:sanctum')->group(function () {
     Route::post('/send-message', [ChatController::class, 'sendMessage']);
+    Route::post('/read-message', [ChatController::class, 'getMessage']);
 });
 
 Route::prefix('admin')->group(function () {
