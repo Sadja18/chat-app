@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:ui/widgets/components/chat_list_item.dart';
 
 class ChatsPreviewScreen extends StatefulWidget {
   static const routeName = '/chats-screen';
@@ -21,12 +22,46 @@ class _ChatsPreviewScreenState extends State<ChatsPreviewScreen> {
           kToolbarHeight -
           MediaQuery.of(context).padding.top,
       width: MediaQuery.of(context).size.width * 0.90,
-      margin: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
-      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        // color: Colors.amber.shade200,
+        color: Colors.purple.shade200,
+      ),
+      alignment: Alignment.topCenter,
       child: Column(
-        children: const [
-          Text('A search bar'),
-          Text('Column of chats (retrieve from db)'),
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.lightBlue.shade100,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            height: MediaQuery.of(context).size.height * 0.05,
+            width: MediaQuery.of(context).size.width * 0.96,
+            alignment: Alignment.center,
+            child: const Text(
+              'A search bar',
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            height: MediaQuery.of(context).size.height * 0.70,
+            width: MediaQuery.of(context).size.width * 0.98,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              // color: Colors.lime.shade100,
+            ),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: List.generate(
+                  12,
+                  (index) => ChatListItem(conversationId: index + 1),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

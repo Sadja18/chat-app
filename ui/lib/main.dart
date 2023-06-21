@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui/screens/chat_page.dart';
 import 'package:ui/screens/home_screen.dart';
 
 void main() {
@@ -25,7 +26,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => widgetReturner(),
-        HomeScreen.routeName: (context) => const HomeScreen()
+        HomeScreen.routeName: (context) => const HomeScreen(),
+        // ignore: prefer_const_constructors
+        ChatPage.routeName: (context) => ChatPage(),
       },
     );
   }
