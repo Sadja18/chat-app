@@ -185,7 +185,7 @@ class _ChatPageState extends State<ChatPage> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
-                        chatMessage.content,
+                        chatMessage.content.toString(),
                         maxLines:
                             3, // Maximum number of lines before line wrap occurs
                         overflow: TextOverflow.ellipsis,
