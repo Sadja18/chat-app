@@ -16,6 +16,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   late int conversationId = 0;
 
+  TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   List<ChatMessage> chatMessages = [];
 
@@ -107,6 +108,20 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+  Future<void> _sendMessage(message) async {
+    try {
+      Future.delayed(const Duration(seconds: 1), () {
+        if (kDebugMode) {
+          log(message);
+        }
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        log("error sending $message");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as int;
@@ -157,7 +172,10 @@ class _ChatPageState extends State<ChatPage> {
 
                     return Container(
                       alignment: alignment,
-                      margin: const EdgeInsets.symmetric(vertical: 6.0),
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 6.0,
+                        horizontal: 10.0,
+                      ),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 10.0,
                         vertical: 10.0,
@@ -177,44 +195,49 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
             ),
-            SizedBox(
+            Container(
+              height: MediaQuery.of(context).size.height * 0.05,
               width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.05,
-                    width: MediaQuery.of(context).size.width * 0.80,
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 5.0,
-                      vertical: 8.0,
-                    ),
-                    alignment: Alignment.bottomLeft,
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'message...',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'message...';
-                        }
-                        return null;
-                      },
+              decoration: BoxDecoration(
+                color: Colors.amber.shade400,
+                borderRadius: BorderRadius.circular(
+                  10.0,
+                ),
+              ),
+              margin: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+                vertical: 8.0,
+              ),
+              alignment: Alignment.bottomLeft,
+              child: TextField(
+                controller: _messageController,
+                minLines: 1,
+                maxLines: null,
+                decoration: InputDecoration(
+                  labelText: 'message...',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(
+                      10.0,
                     ),
                   ),
-                  Container(
+                  suffixIcon: Container(
                     height: MediaQuery.of(context).size.height * 0.05,
                     width: MediaQuery.of(context).size.width * 0.15,
                     alignment: Alignment.bottomRight,
-                    margin: const EdgeInsets.symmetric(horizontal: 2.0),
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 2.0,
+                    ),
                     child: IconButton(
                       onPressed: () {
                         if (kDebugMode) {
                           log('new message');
+                        }
+
+                        if (_messageController.text != "") {
+                          String message = _messageController.text;
+                          _sendMessage(message);
+                        } else {
+                          log('empty click');
                         }
                       },
                       icon: Icon(
@@ -222,8 +245,8 @@ class _ChatPageState extends State<ChatPage> {
                         color: Colors.lightBlue.shade500,
                       ),
                     ),
-                  )
-                ],
+                  ),
+                ),
               ),
             ),
           ],
