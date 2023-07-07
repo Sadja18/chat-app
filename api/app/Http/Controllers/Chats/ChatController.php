@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Chats;
 
+use App\Events\ChatEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Messages;
 use App\Models\User;
@@ -91,6 +92,12 @@ class ChatController extends Controller
 
                 $message->save();
 
+                info('triggering web sokcet event to send message');
+
+                event(new ChatEvent($message));
+
+                info('sending api response to sender');
+
                 return response()->json([
                     'message' => 'Message sent successfully',
                     'data' => [
@@ -115,6 +122,7 @@ class ChatController extends Controller
                 info($messages->count());
 
                 $sequence_id = $messages->count() + 1;
+
                 $message = new Messages([
                     'conversation_id' => $conversation_id,
                     'sequence_id' => $sequence_id,
@@ -127,6 +135,11 @@ class ChatController extends Controller
                 info('message save');
 
                 $message->save();
+                info('triggering web sokcet event to send message');
+
+                event(new ChatEvent($message));
+
+                info('sending api response to sender');
 
                 return response()->json([
                     'message' => 'Message sent successfully',
