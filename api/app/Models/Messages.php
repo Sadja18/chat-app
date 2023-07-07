@@ -8,7 +8,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Messages extends Model implements ShouldBroadcastNow
+class Messages extends Model
 {
     use HasFactory;
 
@@ -28,18 +28,18 @@ class Messages extends Model implements ShouldBroadcastNow
         return $this->belongsTo(Conversation::class);
     }
 
-    public function broadcastOn()
-    {
-        return new PrivateChannel('messages.' . $this->conversation_id);
-    }
+    // public function broadcastOn()
+    // {
+    //     return new PrivateChannel('private-messages.' . $this->conversation_id);
+    // }
 
-    public function broadcastWith()
-    {
-        return [
-            'id' => $this->id,
-            'content' => $this->content,
-            'sender' => $this->sender,
-            // Include any other relevant data
-        ];
-    }
+    // public function broadcastWith()
+    // {
+    //     return [
+    //         'id' => $this->id,
+    //         'content' => $this->content,
+    //         'sender' => $this->sender,
+    //         // Include any other relevant data
+    //     ];
+    // }
 }

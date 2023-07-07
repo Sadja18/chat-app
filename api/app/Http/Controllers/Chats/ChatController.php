@@ -9,6 +9,7 @@ use App\Models\Conversations;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -30,7 +31,7 @@ class ChatController extends Controller
                 return response()->json(['errors' => $validator->errors()], 400);
             }
 
-            $senderId = Auth::user()->id;
+            $senderId = Auth::user()->name;
             $recipient = User::where('name', $request->input('destination'))->first();
 
             info('recipient');
@@ -39,41 +40,54 @@ class ChatController extends Controller
                 return response()->json(['errors' => $validator->errors()], 400);
             }
 
-            $participants = [$senderId, $recipient->id];
+            $participants = [$senderId, $recipient->name];
 
-            // info('participants' . " $participants[0]");
+            info('participants', $participants);
 
             sort($participants); // Sort the participant IDs to maintain consistent conversation IDs
 
             info('sorted');
 
-            $conversation = Conversations::where('participants', $participants)->first();
+            // implement logic for following
+            // save the sorted $participants array as a string, separated by a delimiter
+            $participantsString = implode(":::", $participants);
 
-            info('conversation');
+            // check if the conversation already exists for given participants
+            $conversation = Conversations::where('participants', $participantsString);
 
-            if (!$conversation) {
-                // Create a new conversation if none exists between the sender and recipient
-                info(gettype($participants));
-                $conversation = Conversations::create([
-                    'participants' => $participants
-                ]);
+            info($conversation->get());
+            info($conversation->exists());
+
+            if ($conversation->exists()) {
+                // conversation exists
+                info('conversation exists');
+                return response()->json([
+                    'message' => 'conversation exists',
+                    'data' => [
+                        'participants' => $participants,
+                        'conversations' => $conversation->get()
+                    ]
+                ], 200);
+            } else {
+                // create new conversation
+                info('create new conversation');
+                $conversation = new Conversations();
+                $conversation->participants = $participantsString;
+                $conversation->save();
+
+                return response()->json([
+                    'message' => 'conversation created',
+                    'data' => [
+                        'participants' => $participants,
+                        'conversations' => $conversation
+                    ]
+                ], 201);
             }
-            info('message');
 
-            $message = new Messages([
-                'conversation_id' => $conversation->id,
-                'sequence_id' => $conversation->messages()->count() + 1,
-                'sender_id' => $senderId,
-                'type' => $request->input('type'),
-                'content' => $request->input('content'),
-                'message_delivery_status' => 'pending' // Assuming you have a default status
-            ]);
+            // if conversation already exists; retrieve the conversation id
+            // else create new conversation, and retrieve the conversation id
 
-            info('message save');
 
-            $message->save();
-
-            return response()->json(['message' => 'Message sent successfully'], 200);
         } catch (ValidationException $e) {
             return response()->json(['error' => $e->errors()], 400);
         } catch (\Exception $e) {

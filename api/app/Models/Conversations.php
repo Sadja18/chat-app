@@ -11,10 +11,6 @@ class Conversations extends Model
 
     protected $table = 'conversations';
 
-    protected $casts = [
-        'participants' => 'array',
-    ];
-
     protected $fillable = [
         'participants'
     ];
