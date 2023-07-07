@@ -19,5 +19,4 @@ class Conversations extends Model
     {
         return $this->hasMany(Messages::class, 'conversation_id');
     }
-
 }

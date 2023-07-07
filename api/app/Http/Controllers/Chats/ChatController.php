@@ -12,10 +12,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Ramsey\Uuid\Type\Integer;
 
 class ChatController extends Controller
 {
-    //
+
     public function sendMessage(Request $request)
     {
         try {
@@ -30,9 +31,9 @@ class ChatController extends Controller
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 400);
             }
-
-            $senderId = Auth::user()->name;
+            $senderId = Auth::user()->id;
             $recipient = User::where('name', $request->input('destination'))->first();
+
 
             info('recipient');
 
@@ -40,7 +41,9 @@ class ChatController extends Controller
                 return response()->json(['errors' => $validator->errors()], 400);
             }
 
-            $participants = [$senderId, $recipient->name];
+            $recipientId = $recipient->id;
+
+            $participants = [$senderId, $recipientId];
 
             info('participants', $participants);
 
@@ -55,19 +58,46 @@ class ChatController extends Controller
             // check if the conversation already exists for given participants
             $conversation = Conversations::where('participants', $participantsString);
 
-            info($conversation->get());
+            // info($conversation->get());
             info($conversation->exists());
+            // info(gettype($conversation->get()[0]->id));
 
             if ($conversation->exists()) {
                 // conversation exists
                 info('conversation exists');
+                $conversation_id = $conversation->first()->id;
+
+                // info($conversation_id);
+                $message_content = $request->input('content');
+                $message_type = $request->input('type');
+                // info($message_content);
+
+                // check if messages exists
+                $messages = $conversation->first()->messages();
+                info($messages->count());
+
+                $sequence_id = $messages->count() + 1;
+
+                $message = new Messages([
+                    'conversation_id' => $conversation_id,
+                    'sequence_id' => $sequence_id,
+                    'sender_id' => $senderId,
+                    'type' => $message_type,
+                    'content' => $message_content,
+                    'message_delivery_status' => 'pending' // Assuming you have a default status
+                ]);
+
+                info('message save');
+
+                $message->save();
+
                 return response()->json([
-                    'message' => 'conversation exists',
+                    'message' => 'Message sent successfully',
                     'data' => [
-                        'participants' => $participants,
-                        'conversations' => $conversation->get()
+                        'message' => $message,
+                        'conversation' => $conversation_id
                     ]
-                ], 200);
+                ], 201);
             } else {
                 // create new conversation
                 info('create new conversation');
@@ -75,11 +105,34 @@ class ChatController extends Controller
                 $conversation->participants = $participantsString;
                 $conversation->save();
 
+                $conversation_id = $conversation->id;
+
+                $message_content = $request->input('content');
+                $message_type = $request->input('type');
+                // info($message_content);
+
+                $messages = $conversation->first()->messages();
+                info($messages->count());
+
+                $sequence_id = $messages->count() + 1;
+                $message = new Messages([
+                    'conversation_id' => $conversation_id,
+                    'sequence_id' => $sequence_id,
+                    'sender_id' => $senderId,
+                    'type' => $message_type,
+                    'content' => $message_content,
+                    'message_delivery_status' => 'pending' // Assuming you have a default status
+                ]);
+
+                info('message save');
+
+                $message->save();
+
                 return response()->json([
-                    'message' => 'conversation created',
+                    'message' => 'Message sent successfully',
                     'data' => [
-                        'participants' => $participants,
-                        'conversations' => $conversation
+                        'message' => $message,
+                        'conversation' => $conversation_id
                     ]
                 ], 201);
             }
