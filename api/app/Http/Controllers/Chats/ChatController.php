@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Chats;
 
+use App\Events\ChatEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Messages;
 use App\Models\User;
@@ -58,6 +59,8 @@ class ChatController extends Controller
             // check if the conversation already exists for given participants
             $conversation = Conversations::where('participants', $participantsString);
 
+            $output = null;
+
             // info($conversation->get());
             info($conversation->exists());
             // info(gettype($conversation->get()[0]->id));
@@ -91,13 +94,11 @@ class ChatController extends Controller
 
                 $message->save();
 
-                return response()->json([
+                // return response()->json(, 201);
+                $output = [
                     'message' => 'Message sent successfully',
-                    'data' => [
-                        'message' => $message,
-                        'conversation' => $conversation_id
-                    ]
-                ], 201);
+                    'data' => $message
+                ];
             } else {
                 // create new conversation
                 info('create new conversation');
@@ -115,6 +116,7 @@ class ChatController extends Controller
                 info($messages->count());
 
                 $sequence_id = $messages->count() + 1;
+
                 $message = new Messages([
                     'conversation_id' => $conversation_id,
                     'sequence_id' => $sequence_id,
@@ -127,18 +129,21 @@ class ChatController extends Controller
                 info('message save');
 
                 $message->save();
-
-                return response()->json([
+                $output = [
                     'message' => 'Message sent successfully',
-                    'data' => [
-                        'message' => $message,
-                        'conversation' => $conversation_id
-                    ]
-                ], 201);
-            }
+                    'data' => $message
+                ];
 
-            // if conversation already exists; retrieve the conversation id
-            // else create new conversation, and retrieve the conversation id
+
+            }
+            info('triggering web sokcet event to send message');
+
+            event(new ChatEvent($message));
+
+            info('sending api response to sender');
+
+            return response()->json($output, 201);
+
 
 
         } catch (ValidationException $e) {

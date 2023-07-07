@@ -165,7 +165,7 @@
             "method": "POST",
             "sortNum": 80000,
             "created": "2023-06-15T09:36:10.906Z",
-            "modified": "2023-07-07T06:21:15.278Z",
+            "modified": "2023-07-07T10:20:06.834Z",
             "headers": [
                 {
                     "name": "Authorization",
@@ -175,7 +175,7 @@
             "params": [],
             "body": {
                 "type": "json",
-                "raw": "{\n  \"type\": \"text\",\n  \"content\": \"Hello, User 1! This is a reply message.\",\n  \"destination\": \"sadja123\"\n}\n",
+                "raw": "{\n  \"type\": \"text\",\n  \"content\": \"Hello, User 1! This is to test the web socket message.\",\n  \"destination\": \"sadja123\"\n}\n",
                 "form": []
             },
             "tests": []
