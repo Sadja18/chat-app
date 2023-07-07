@@ -11,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ChatEvent
+class ChatEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -22,6 +22,8 @@ class ChatEvent
      */
     public function __construct(Messages $message)
     {
+        info('chat event constructor');
+        // info($message);
         //
         $this->message = $message;
     }
@@ -35,6 +37,8 @@ class ChatEvent
     {
         // specify the conversation channel the communication should appear on
         $conversationChannel = 'private-conversation-' . $this->message->conversation_id;
+
+        info('conversation channel' . $conversationChannel);
         return [
             new PrivateChannel($conversationChannel),
         ];

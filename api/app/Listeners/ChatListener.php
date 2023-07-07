@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Broadcast;
 
 class ChatListener implements ShouldQueue
 {
+    use InteractsWithQueue;
     /**
      * Create the event listener.
      */
@@ -22,12 +23,16 @@ class ChatListener implements ShouldQueue
      */
     public function handle(ChatEvent $event): void
     {
+        dd(config('app.log_level'));
+        info('inside the handle of listener of chat event');
         //
         $message = $event->message;
-
-        $conversationChannel = 'conversation.' . $message->conversation_id;
+        info($message->sequence_id);
 
         // Broad cast the event to the conversation channel
-        broadcast($event)->toOthers();
+        $conversationChannel = 'private-conversation-' . $message->conversation_id;
+        info($conversationChannel);
+        broadcast($message)->toOthers();
+        info('broadcasted');
     }
 }
