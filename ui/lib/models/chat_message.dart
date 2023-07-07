@@ -1,7 +1,7 @@
 class ChatMessage {
-  late String sender;
-  late int id;
-  late String content;
+  String? sender;
+  int? id;
+  String? content;
 
   ChatMessage({
     required this.id,

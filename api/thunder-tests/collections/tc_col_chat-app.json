@@ -1,0 +1,246 @@
+{
+    "_id": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+    "colName": "Chat App",
+    "created": "2023-06-09T06:57:35.824Z",
+    "sortNum": 10000,
+    "folders": [
+        {
+            "_id": "2e31754a-eac3-41e4-ba89-97e4f9b1948b",
+            "name": "Admin",
+            "containerId": "",
+            "created": "2023-06-15T10:31:00.059Z",
+            "sortNum": 10000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "5bb29c3c-fbda-4eee-9e02-ed0501725382",
+            "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+            "containerId": "",
+            "name": "01 - Register",
+            "url": "localhost:8000/api/register",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-06-09T06:57:46.569Z",
+            "modified": "2023-06-09T07:03:00.356Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"sadja3388\",\n  \"email\": \"namanmishra.nm5@gmail.com\",\n  \"password\": \"ssnkdnaman\",\n  \"confirm_password\": \"ssnkdnaman\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "82cb7589-ac97-4567-a2c9-f1ecf7adbb4f",
+            "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+            "containerId": "",
+            "name": "02 - Generate OTP",
+            "url": "localhost:8000/api/email/otp",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-06-09T07:03:34.819Z",
+            "modified": "2023-06-15T11:24:45.384Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer 3|0ponfFb6kWJWpsSzdZoI4eMaoZKvigzeyLXDmSFj"
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "6eeb3fd2-dc6f-4bf9-90ff-54f73f1ce5ce",
+            "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+            "containerId": "",
+            "name": "03 - VerifyEmail",
+            "url": "localhost:8000/api/email/verify",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-06-09T10:26:29.464Z",
+            "modified": "2023-06-15T11:25:45.780Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer 3|0ponfFb6kWJWpsSzdZoI4eMaoZKvigzeyLXDmSFj"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"otp\": \"rm7eT69\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "2fa526d4-50ce-436c-939f-b6eafd050dfd",
+            "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+            "containerId": "",
+            "name": "04 - Get Profile",
+            "url": "http://localhost:8000/api/profiles/",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2023-06-12T05:32:36.114Z",
+            "modified": "2023-06-12T05:33:51.465Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer 2|W8muX6QzIVkDWLaH93U0rBlQ5vc9ioSAOGpru1Hw"
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "0e68ce55-a892-4465-996f-b4d172709f46",
+            "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+            "containerId": "",
+            "name": "05 -Get Visibility",
+            "url": "localhost:8000/api/profiles/visibility/get",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2023-06-12T07:36:58.615Z",
+            "modified": "2023-06-12T09:07:40.428Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer 2|W8muX6QzIVkDWLaH93U0rBlQ5vc9ioSAOGpru1Hw"
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "edc48c0c-c2e7-4cd5-97dc-5d9ed69e830b",
+            "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+            "containerId": "",
+            "name": "06 - Create Profile",
+            "url": "localhost:8000/api/profiles/store",
+            "method": "POST",
+            "sortNum": 60000,
+            "created": "2023-06-12T09:08:07.198Z",
+            "modified": "2023-06-12T09:39:37.674Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer 2|W8muX6QzIVkDWLaH93U0rBlQ5vc9ioSAOGpru1Hw"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"first_name\": \"naman\",\n  \"last_name\": \"mishra\",\n  \"country\": \"India\",\n  \"contact_phone\": \"+91-77207897914\",\n  \"profile_pic\": \"\",\n  \"online_status\": false\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "753e3082-9fa1-4b3d-b6f2-c3a257ca8691",
+            "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+            "containerId": "",
+            "name": "07 - Get Online Status",
+            "url": "http://localhost:8000/api/profiles/online-status",
+            "method": "GET",
+            "sortNum": 70000,
+            "created": "2023-06-14T11:43:29.158Z",
+            "modified": "2023-06-23T10:26:22.532Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer 5|rQONxPB0Tg3AsVFAO9QBOeOJfdTn8wgWQbTKsjid"
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "1a46037a-cc61-4255-9faf-35b34dbe665e",
+            "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+            "containerId": "",
+            "name": "08 - Send Chat Message",
+            "url": "localhost:8000/api/chats/send-message",
+            "method": "POST",
+            "sortNum": 80000,
+            "created": "2023-06-15T09:36:10.906Z",
+            "modified": "2023-07-07T06:21:15.278Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer 10|s1ALJ9U7nfayO5OkfWDCJjW1GRmsOmmzQY84DHZV"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"type\": \"text\",\n  \"content\": \"Hello, User 1! This is a reply message.\",\n  \"destination\": \"sadja123\"\n}\n",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "ed98f896-1471-4611-a023-9aeebf400bca",
+            "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+            "containerId": "2e31754a-eac3-41e4-ba89-97e4f9b1948b",
+            "name": "01 - Change Password ",
+            "url": "localhost:8000/api/admin/update-password",
+            "method": "POST",
+            "sortNum": 90000,
+            "created": "2023-06-15T10:31:10.736Z",
+            "modified": "2023-07-07T06:07:22.705Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"namanmishra.nm5@gmail.com\",\n  \"newPassword\": \"sadja123\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "152e919b-d36c-4f1d-8d3b-d128441c3b59",
+            "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+            "containerId": "",
+            "name": "09 - Login",
+            "url": "localhost:8000/api/login",
+            "method": "POST",
+            "sortNum": 100000,
+            "created": "2023-06-15T11:19:41.800Z",
+            "modified": "2023-07-07T06:11:21.520Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"namanmishraec1045@gmail.com\",\n  \"password\": \"sadja123\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "0c1a01ed-3178-4971-aa6d-26b872b687f7",
+            "colId": "e2a0b246-fbcd-45a5-b51e-84e7a9941a9f",
+            "containerId": "",
+            "name": "10 - Get Messages for conversations",
+            "url": "localhost:8000/api/chats/read-message",
+            "method": "POST",
+            "sortNum": 110000,
+            "created": "2023-07-07T05:36:09.996Z",
+            "modified": "2023-07-07T09:03:47.517Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer 11|NTBBG8gIuAqy8Ir5vyOjOzYpsUKh4orqfbQV0yeZ"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"conversation_id\": 17,\n  \"limit\": 15,\n  \"offset\": 0\n}",
+                "form": []
+            },
+            "tests": []
+        }
+    ]
+}

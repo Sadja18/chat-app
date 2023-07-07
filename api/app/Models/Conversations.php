@@ -11,10 +11,6 @@ class Conversations extends Model
 
     protected $table = 'conversations';
 
-    protected $casts = [
-        'participants' => 'array',
-    ];
-
     protected $fillable = [
         'participants'
     ];
@@ -23,5 +19,4 @@ class Conversations extends Model
     {
         return $this->hasMany(Messages::class, 'conversation_id');
     }
-
 }
