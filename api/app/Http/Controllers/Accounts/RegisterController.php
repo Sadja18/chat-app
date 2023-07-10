@@ -32,6 +32,17 @@ class RegisterController extends Controller
         }
 
         $input = $request->all();
+
+        $isUserNameExists = User::where('name', $input['name'])->get();
+        $isEmailExists = User::where('email', $input['email'])->get();
+
+        if ($isUserNameExists && !empty($isUserNameExists)) {
+            return response()->json(['message' => 'username is taken'], 500);
+        }
+        if ($isEmailExists && !empty($isEmailExists)) {
+            return response()->json(['message' => 'Account with the provided email already exists'], 500);
+        }
+
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $success['token'] = $user->createToken('MyApp')->plainTextToken;

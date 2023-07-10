@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'account_state', // to track if user is activated or deactivated or pending verification
     ];
 
     /**
@@ -76,5 +77,10 @@ class User extends Authenticatable
         }
 
         return false;
+    }
+
+    public function isActive()
+    {
+        return $this->account_state;
     }
 }

@@ -18,6 +18,27 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
+
+            $isUserActive = $user->isActive();
+            info('isactive');
+
+            if (!$isUserActive || $isUserActive != 1) {
+                if ($isUserActive == 0) {
+                    return response()->json([
+                        'message' => 'You need to verify your account to see profile settings'
+                    ], 403);
+                } else if ($isUserActive == -1) {
+                    return response()->json([
+                        'message' => 'Your account was deleted'
+                    ], 404);
+                } else {
+                    return response()->json([
+                        'message' => 'Your account is not active.\nPlease contact Admin',
+                    ], 403);
+                }
+            }
+
+            // $senderId = $user->id;
             // Check if the user already has a profile
             $existingProfile = $user->profile;
             // Check if the user already has a profile
@@ -76,6 +97,27 @@ class ProfileController extends Controller
         try {
             info("Auth user checking");
             $user = Auth::user();
+
+            $isUserActive = $user->isActive();
+            info('isactive');
+
+            if (!$isUserActive || $isUserActive != 1) {
+                if ($isUserActive == 0) {
+                    return response()->json([
+                        'message' => 'You need to verify your account to see chats'
+                    ], 403);
+                } else if ($isUserActive == -1) {
+                    return response()->json([
+                        'message' => 'Your account was deleted'
+                    ], 404);
+                } else {
+                    return response()->json([
+                        'message' => 'Your account is not active.\nPlease contact Admin',
+                    ], 403);
+                }
+            }
+
+            // $senderId = $user->id;
 
             // info("$user ', $user->i");
             $user_id = $user->id;
@@ -274,6 +316,27 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
+
+            $isUserActive = $user->isActive();
+            info('isactive');
+
+            if (!$isUserActive || $isUserActive != 1) {
+                if ($isUserActive == 0) {
+                    return response()->json([
+                        'message' => 'You need to verify your account to see chats'
+                    ], 403);
+                } else if ($isUserActive == -1) {
+                    return response()->json([
+                        'message' => 'Your account was deleted'
+                    ], 404);
+                } else {
+                    return response()->json([
+                        'message' => 'Your account is not active.\nPlease contact Admin',
+                    ], 403);
+                }
+            }
+
+            // $senderId = $user->id;
             $profile = $user->profile;
             $visibilitySettings = $user->profileVisibility;
 
@@ -306,6 +369,27 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
+
+            $isUserActive = $user->isActive();
+            info('isactive');
+
+            if (!$isUserActive || $isUserActive != 1) {
+                if ($isUserActive == 0) {
+                    return response()->json([
+                        'message' => 'You need to verify your account to see chats'
+                    ], 403);
+                } else if ($isUserActive == -1) {
+                    return response()->json([
+                        'message' => 'Your account was deleted'
+                    ], 404);
+                } else {
+                    return response()->json([
+                        'message' => 'Your account is not active.\nPlease contact Admin',
+                    ], 403);
+                }
+            }
+
+            // $senderId = $user->id;
             $profile = Profile::where('user_id', $user->id)->first();
 
             // Check if a profile exists for the user
@@ -375,6 +459,27 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
+
+            $isUserActive = $user->isActive();
+            info('isactive');
+
+            if (!$isUserActive || $isUserActive != 1) {
+                if ($isUserActive == 0) {
+                    return response()->json([
+                        'message' => 'You need to verify your account to see chats'
+                    ], 403);
+                } else if ($isUserActive == -1) {
+                    return response()->json([
+                        'message' => 'Your account was deleted'
+                    ], 404);
+                } else {
+                    return response()->json([
+                        'message' => 'Your account is not active.\nPlease contact Admin',
+                    ], 403);
+                }
+            }
+
+            // $senderId = $user->id;
             $profile = Profile::where('user_id', $user->id)->first();
             $visibilitySettings = VisibilitySettings::where('user_id', $user->id)->first();
 
@@ -413,6 +518,27 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
+
+            $isUserActive = $user->isActive();
+            info('isactive');
+
+            if (!$isUserActive || $isUserActive != 1) {
+                if ($isUserActive == 0) {
+                    return response()->json([
+                        'message' => 'You need to verify your account to see chats'
+                    ], 403);
+                } else if ($isUserActive == -1) {
+                    return response()->json([
+                        'message' => 'Your account was deleted'
+                    ], 404);
+                } else {
+                    return response()->json([
+                        'message' => 'Your account is not active.\nPlease contact Admin',
+                    ], 403);
+                }
+            }
+
+            // $senderId = $user->id;
             // $onlineStatus = $user->profile ? $user->profile->online_status : false;
             $profile = $user->profile;
 
@@ -449,6 +575,27 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
+
+            $isUserActive = $user->isActive();
+            info('isactive');
+
+            if (!$isUserActive || $isUserActive != 1) {
+                if ($isUserActive == 0) {
+                    return response()->json([
+                        'message' => 'You need to verify your account to see chats'
+                    ], 403);
+                } else if ($isUserActive == -1) {
+                    return response()->json([
+                        'message' => 'Your account was deleted'
+                    ], 404);
+                } else {
+                    return response()->json([
+                        'message' => 'Your account is not active.\nPlease contact Admin',
+                    ], 403);
+                }
+            }
+
+            // $senderId = $user->id;
             $profile = Profile::where('user_id', $user->id)->first();
 
             // Check if a profile exists for the user

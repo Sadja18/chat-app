@@ -32,7 +32,30 @@ class ChatController extends Controller
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 400);
             }
-            $senderId = Auth::user()->id;
+
+            $user = Auth::user();
+
+            $isUserActive = $user->isActive();
+            info('isactive');
+
+            if (!$isUserActive || $isUserActive != 1) {
+                if ($isUserActive == 0) {
+                    return response()->json([
+                        'message' => 'You need to verify your account to see chats'
+                    ], 403);
+                } else if ($isUserActive == -1) {
+                    return response()->json([
+                        'message' => 'Your account was deleted'
+                    ], 404);
+                } else {
+                    return response()->json([
+                        'message' => 'Your account is not active.\nPlease contact Admin',
+                    ], 403);
+                }
+            }
+
+            $senderId = $user->id;
+
             $recipient = User::where('name', $request->input('destination'))->first();
 
 
@@ -159,6 +182,26 @@ class ChatController extends Controller
         try {
             //code...
             $user = Auth::user();
+            info('isactive');
+
+            $isUserActive = $user->isActive();
+            info('isactive');
+
+            if (!$isUserActive || $isUserActive != 1) {
+                if ($isUserActive == 0) {
+                    return response()->json([
+                        'message' => 'You need to verify your account to see chats'
+                    ], 403);
+                } else if ($isUserActive == -1) {
+                    return response()->json([
+                        'message' => 'Your account was deleted'
+                    ], 404);
+                } else {
+                    return response()->json([
+                        'message' => 'Your account is not active.\nPlease contact Admin',
+                    ], 403);
+                }
+            }
 
             $validator = Validator::make($request->all(), [
                 'conversation_id' => 'required|int',
