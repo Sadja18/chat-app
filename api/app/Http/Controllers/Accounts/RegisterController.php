@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Accounts;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -44,6 +45,16 @@ class RegisterController extends Controller
         }
 
         $input['password'] = bcrypt($input['password']);
+
+        // set the user as normal user by default
+
+        // role id for normal user 
+        $userRole = UserRole::where('name', 'User')->first();
+        $user_role_id = $userRole->value('id');
+
+        // update the input array to include the role id
+        $input['role_id'] = $user_role_id;
+
         $user = User::create($input);
         $success['token'] = $user->createToken('MyApp')->plainTextToken;
         $success['name'] = $user->name;
