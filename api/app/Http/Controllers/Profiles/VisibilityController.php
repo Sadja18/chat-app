@@ -12,7 +12,8 @@ class VisibilityController extends Controller
     public function get(Request $request)
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
+
             $visibilitySetting = $user->visibilitySetting;
 
             if (!$visibilitySetting) {

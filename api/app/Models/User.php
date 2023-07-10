@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+// use 
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -21,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'account_state', // to track if user is activated or deactivated or pending verification
+        'role_id', // field to check permissions
     ];
 
     /**
@@ -76,5 +80,15 @@ class User extends Authenticatable
         }
 
         return false;
+    }
+
+    public function isActive()
+    {
+        return $this->account_state;
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(UserRole::class, 'role_id');
     }
 }

@@ -62,6 +62,8 @@ class OTPController extends Controller
 
         // Retrieve the stored OTP from the database
         $user = Auth::user();
+
+        // $senderId = $user->id;
         $storedOTP = OTP::where('user_id', $user->id)->orderBy('created_at', 'desc')->first();
 
         if ($storedOTP && OTPHelper::validateOTP($storedOTP->otp, $otp)) {

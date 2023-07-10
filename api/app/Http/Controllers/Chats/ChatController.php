@@ -32,7 +32,11 @@ class ChatController extends Controller
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 400);
             }
-            $senderId = Auth::user()->id;
+
+            $user = Auth::user();
+
+            $senderId = $user->id;
+
             $recipient = User::where('name', $request->input('destination'))->first();
 
 

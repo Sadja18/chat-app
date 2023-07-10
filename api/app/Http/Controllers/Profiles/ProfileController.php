@@ -18,6 +18,7 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
+
             // Check if the user already has a profile
             $existingProfile = $user->profile;
             // Check if the user already has a profile
@@ -77,7 +78,6 @@ class ProfileController extends Controller
             info("Auth user checking");
             $user = Auth::user();
 
-            // info("$user ', $user->i");
             $user_id = $user->id;
 
             // Check if the user already has a profile
@@ -274,6 +274,7 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
+
             $profile = $user->profile;
             $visibilitySettings = $user->profileVisibility;
 
@@ -306,6 +307,7 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
+
             $profile = Profile::where('user_id', $user->id)->first();
 
             // Check if a profile exists for the user
@@ -375,6 +377,7 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
+
             $profile = Profile::where('user_id', $user->id)->first();
             $visibilitySettings = VisibilitySettings::where('user_id', $user->id)->first();
 
@@ -413,7 +416,7 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
-            // $onlineStatus = $user->profile ? $user->profile->online_status : false;
+
             $profile = $user->profile;
 
             if (!$profile) {
@@ -449,6 +452,7 @@ class ProfileController extends Controller
     {
         try {
             $user = Auth::user();
+
             $profile = Profile::where('user_id', $user->id)->first();
 
             // Check if a profile exists for the user
