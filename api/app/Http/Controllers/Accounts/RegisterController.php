@@ -55,6 +55,10 @@ class RegisterController extends Controller
         // update the input array to include the role id
         $input['role_id'] = $user_role_id;
 
+        // set user active set as 1
+        // to mark the user account as active
+        $input['account_state'] = 1;
+
         $user = User::create($input);
         $success['token'] = $user->createToken('MyApp')->plainTextToken;
         $success['name'] = $user->name;
