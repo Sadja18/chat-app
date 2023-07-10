@@ -14,26 +14,6 @@ class VisibilityController extends Controller
         try {
             $user = Auth::user();
 
-            $isUserActive = $user->isActive();
-            info('isactive');
-
-            if (!$isUserActive || $isUserActive != 1) {
-                if ($isUserActive == 0) {
-                    return response()->json([
-                        'message' => 'You need to verify your account to see profile settings'
-                    ], 403);
-                } else if ($isUserActive == -1) {
-                    return response()->json([
-                        'message' => 'Your account was deleted'
-                    ], 404);
-                } else {
-                    return response()->json([
-                        'message' => 'Your account is not active.\nPlease contact Admin',
-                    ], 403);
-                }
-            }
-
-            // $senderId = $user->id;
             $visibilitySetting = $user->visibilitySetting;
 
             if (!$visibilitySetting) {

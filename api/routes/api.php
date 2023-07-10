@@ -40,7 +40,7 @@ Route::middleware([ThrottleRequests::class . ':5,1'])->group(function () {
     Route::post('/email/verify', [OTPController::class, 'verifyEmail'])->middleware('auth:sanctum');
 });
 
-Route::prefix('profiles')->middleware('auth:sanctum')->group(function () {
+Route::prefix('profiles')->middleware('auth:sanctum', 'activeUser')->group(function () {
     Route::get('/', [ProfileController::class, 'index']);
     Route::post('/store', [ProfileController::class, 'store']);
     Route::get('/show', [ProfileController::class, 'show']);
@@ -53,11 +53,11 @@ Route::prefix('profiles')->middleware('auth:sanctum')->group(function () {
     Route::get('/visibility/get', [VisibilityController::class, 'get']);
 });
 
-Route::prefix('chats')->middleware('auth:sanctum')->group(function () {
+Route::prefix('chats')->middleware('auth:sanctum', 'activeUser')->group(function () {
     Route::post('/send-message', [ChatController::class, 'sendMessage']);
     Route::post('/read-message', [ChatController::class, 'getMessage']);
 });
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware('activeUser')->group(function () {
     Route::post('/update-password', [RegisterController::class, 'changePasswordUsingAdminAccess']);
 });
