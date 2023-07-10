@@ -41,8 +41,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _fetchMessages() {
-    // Simulating an API call to fetch previous messages
-    // Replace this with your actual API call
+    // API call to fetch previous messages
     setState(() {
       _isLoading = true;
     });
