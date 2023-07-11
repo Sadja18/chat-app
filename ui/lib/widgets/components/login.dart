@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class LoginWidget extends StatefulWidget {
+  const LoginWidget({super.key});
+
   @override
   _LoginWidgetState createState() => _LoginWidgetState();
 }
@@ -27,6 +29,9 @@ class _LoginWidgetState extends State<LoginWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Baat Cheet"),
+      ),
       body: OrientationBuilder(
         builder: (BuildContext context, Orientation orientation) {
           return Center(
@@ -40,56 +45,62 @@ class _LoginWidgetState extends State<LoginWidget> {
   }
 
   Widget buildPortraitLayout() {
-    return Form(
-      key: _formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextFormField(
-            decoration: InputDecoration(
-              labelText: 'Username',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12.0,
+      ),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: 'Username',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
               ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter a username';
+                }
+                return null;
+              },
             ),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter a username';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            obscureText: !_passwordVisible,
-            decoration: InputDecoration(
-              labelText: 'Password',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
+            const SizedBox(height: 16),
+            TextFormField(
+              obscureText: !_passwordVisible,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(_passwordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off),
+                  onPressed: () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  },
+                ),
               ),
-              suffixIcon: IconButton(
-                icon: Icon(
-                    _passwordVisible ? Icons.visibility : Icons.visibility_off),
-                onPressed: () {
-                  setState(() {
-                    _passwordVisible = !_passwordVisible;
-                  });
-                },
-              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter a password';
+                }
+                return null;
+              },
             ),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter a password';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: _submitForm,
-            child: const Text('Submit'),
-          ),
-        ],
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _submitForm,
+              child: const Text('Submit'),
+            ),
+          ],
+        ),
       ),
     );
   }

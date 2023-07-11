@@ -35,7 +35,7 @@ Future<dynamic> loginUser(String email, String userPassword) async {
 
         var result =
             await DataBaseProvider.db.makeUserActive(userName, authToken);
-        return {'status': 'success'};
+        return result;
       } else {
         if (kDebugMode) {
           log('response body not work');

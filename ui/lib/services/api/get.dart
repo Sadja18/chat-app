@@ -25,3 +25,13 @@ Future<dynamic> getPreviousChatMessage(
     return null;
   }
 }
+
+Future<dynamic> getProfile() async {
+  try {} catch (e) {
+    if (kDebugMode) {
+      log('error in getting profile details of current user');
+      log(e.toString());
+    }
+    return null;
+  }
+}
