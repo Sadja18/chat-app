@@ -34,13 +34,15 @@ class RegisterController extends Controller
 
         $input = $request->all();
 
-        $isUserNameExists = User::where('name', $input['name'])->get();
-        $isEmailExists = User::where('email', $input['email'])->get();
+        $isUserNameExists = User::where('name', $input['name'])->exists();
+        $isEmailExists = User::where('email', $input['email'])->exists();
 
-        if ($isUserNameExists && !empty($isUserNameExists)) {
+        if ($isUserNameExists) {
+            info($isUserNameExists);
             return response()->json(['message' => 'username is taken'], 500);
         }
-        if ($isEmailExists && !empty($isEmailExists)) {
+        if ($isEmailExists) {
+            info($isEmailExists);
             return response()->json(['message' => 'Account with the provided email already exists'], 500);
         }
 
