@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:ui/services/helper/regexes.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
@@ -14,6 +15,9 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   bool _passwordVisible = false;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   void _submitForm() {
@@ -26,12 +30,16 @@ class _LoginWidgetState extends State<LoginWidget> {
     }
   }
 
+  bool passwordValidator(String val) {
+    if (val.toString().length > 3) {
+      return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Baat Cheet"),
-      ),
       body: OrientationBuilder(
         builder: (BuildContext context, Orientation orientation) {
           return Center(
@@ -55,21 +63,26 @@ class _LoginWidgetState extends State<LoginWidget> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextFormField(
+              controller: _emailController,
               decoration: InputDecoration(
-                labelText: 'Username',
+                labelText: 'Email',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Please enter a username';
+                  return 'Please enter the login email';
+                }
+                if (!emailRegex.hasMatch(value)) {
+                  return 'Please enter a valid email';
                 }
                 return null;
               },
             ),
             const SizedBox(height: 16),
             TextFormField(
+              controller: _passwordController,
               obscureText: !_passwordVisible,
               decoration: InputDecoration(
                 labelText: 'Password',
@@ -89,7 +102,10 @@ class _LoginWidgetState extends State<LoginWidget> {
               ),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Please enter a password';
+                  return 'Please enter the login password';
+                }
+                if (!passwordValidator(value)) {
+                  return 'Please enter the valid password';
                 }
                 return null;
               },
@@ -116,21 +132,23 @@ class _LoginWidgetState extends State<LoginWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFormField(
+                  controller: _emailController,
                   decoration: InputDecoration(
-                    labelText: 'Username',
+                    labelText: 'Email',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter a username';
+                      return 'Please enter the login email';
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  controller: _passwordController,
                   obscureText: !_passwordVisible,
                   decoration: InputDecoration(
                     labelText: 'Password',
@@ -150,7 +168,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter a password';
+                      return 'Please enter the login password';
                     }
                     return null;
                   },

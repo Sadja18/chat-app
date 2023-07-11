@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import '../../models/user.dart';
+// import '../../models/user.dart';
 
 class DataBaseProvider {
   DataBaseProvider._();
@@ -48,7 +48,6 @@ class DataBaseProvider {
 
   String createUserTable() {
     return "CREATE TABLE User("
-        "userId INTEGER PRIMARY KEY,"
         "userName TEXT NOT NULL,"
         "email TEXT NOT NULL,"
         "loginStatus INTEGER DEFAULT 0,"
@@ -72,12 +71,13 @@ class DataBaseProvider {
   // insert query
 
   // user
-  Future<dynamic> addUser(User user) async {
+  Future<dynamic> addUser(Map<String, Object?> user) async {
     final db = await initDB();
+
     var result = await db.insert(
       'User',
-      user.toMap(),
-      ConflictAlgorithm.replace,
+      user,
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
     if (kDebugMode) {
       log('user add res $result');

@@ -39,13 +39,13 @@ class FirstScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: LoginWidget(),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(8.0),
               child: RegisterWidget(),
             ),

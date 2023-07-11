@@ -1,4 +1,4 @@
-const baseUri = 'http://localhost:8000/api';
+const baseUri = 'http://10.0.2.2:8000/api';
 
 // ----------------------------------------
 // account routes

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ui/screens/chat_page.dart';
+import 'package:ui/screens/first_screen.dart';
 import 'package:ui/screens/home_screen.dart';
 
 void main() {
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   Widget widgetReturner() {
     return FutureBuilder(builder: (BuildContext ctx, AsyncSnapshot snap) {
-      return const HomeScreen();
+      return const FirstScreen();
     });
   }
 
@@ -63,7 +64,7 @@ class MyApp extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.0),
           ),
         ),
-        scaffoldBackgroundColor: const Color.fromRGBO(232, 234, 246, 1),
+        scaffoldBackgroundColor: const Color.fromRGBO(211, 217, 250, 1),
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: Colors.blue,
           selectionHandleColor: Colors.lightBlue.shade300,
@@ -78,6 +79,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => widgetReturner(),
+        FirstScreen.routeName: (context) => const FirstScreen(),
         HomeScreen.routeName: (context) => const HomeScreen(),
         // ignore: prefer_const_constructors
         ChatPage.routeName: (context) => ChatPage(),
