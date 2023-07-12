@@ -20,7 +20,7 @@ class OTPController extends Controller
 
         Log::info("$otp geneated controller");
 
-        $user = Auth::user();
+        $user = $request->user();
 
         Log::info("generate otp controller user fetched");
 
@@ -61,7 +61,7 @@ class OTPController extends Controller
         }
 
         // Retrieve the stored OTP from the database
-        $user = Auth::user();
+        $user = $request->user();
 
         // $senderId = $user->id;
         $storedOTP = OTP::where('user_id', $user->id)->orderBy('created_at', 'desc')->first();

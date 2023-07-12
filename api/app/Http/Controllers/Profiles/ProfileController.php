@@ -14,10 +14,10 @@ class ProfileController extends Controller
      * Summary of index
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
 
             // Check if the user already has a profile
             $existingProfile = $user->profile;
@@ -76,7 +76,7 @@ class ProfileController extends Controller
     {
         try {
             info("Auth user checking");
-            $user = Auth::user();
+            $user = $request->user();
 
             $user_id = $user->id;
 
@@ -273,7 +273,7 @@ class ProfileController extends Controller
     public function show(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
 
             $profile = $user->profile;
             $visibilitySettings = $user->profileVisibility;
@@ -306,7 +306,7 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
 
             $profile = Profile::where('user_id', $user->id)->first();
 
@@ -376,7 +376,7 @@ class ProfileController extends Controller
     public function destroy(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
 
             $profile = Profile::where('user_id', $user->id)->first();
             $visibilitySettings = VisibilitySettings::where('user_id', $user->id)->first();
@@ -415,7 +415,7 @@ class ProfileController extends Controller
     public function getOnlineStatus(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
 
             $profile = $user->profile;
 
@@ -451,7 +451,7 @@ class ProfileController extends Controller
     public function updateOnlineStatus(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
 
             $profile = Profile::where('user_id', $user->id)->first();
 

@@ -77,7 +77,7 @@ class RegisterController extends Controller
     public function login(Request $request)
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user = Auth::user();
+            $user = $request->user();
             $success['token'] = $user->createToken('MyApp')->plainTextToken;
             $success['name'] = $user->name;
 
@@ -94,7 +94,7 @@ class RegisterController extends Controller
      */
     public function logout(Request $request)
     {
-        $user = Auth::user();
+        $user = $request->user();
         $user->tokens()->delete();
 
         return response()->json(['message' => 'Logged out successfully']);
@@ -118,7 +118,7 @@ class RegisterController extends Controller
                 return $this->sendError('Validation Error.', $validator->errors());
             }
 
-            $user = Auth::user();
+            $user = $request->user();
 
             if (!Hash::check($request->current_password, $user->password)) {
                 return $this->sendError('Invalid password.', ['error' => 'Invalid password']);

@@ -12,7 +12,7 @@ class VisibilityController extends Controller
     public function get(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
 
             $visibilitySetting = $user->visibilitySetting;
 
