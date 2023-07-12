@@ -18,7 +18,7 @@ class AdminAccess
     {
         // info('checking if middleware works');
         // info($request->user());
-        // info(Auth::user());
+        // info($request->user());
         // info('kgj');
         if ($request->user() && $request->user()->role_id !== 1) {
             // User does not have admin role

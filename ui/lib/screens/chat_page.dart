@@ -16,7 +16,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   late int conversationId = 0;
 
-  TextEditingController _messageController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   List<ChatMessage> chatMessages = [];
 
@@ -82,10 +82,7 @@ class _ChatPageState extends State<ChatPage> {
       final messageId = index + start;
 
       if (index % 2 == 0) {
-        return ChatMessage(
-            id: messageId,
-            sender: "User1",
-            content: "${messageId.toString()} + $_currentPage");
+        return ChatMessage(id: messageId, sender: "User1", content: "${messageId.toString()} + $_currentPage");
       } else {
         return ChatMessage(
           id: messageId,
@@ -97,8 +94,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
       // Scrolled to the top, fetch previous messages
       if (kDebugMode) {
         log("Scrolled to the top, fetch previous messages");
@@ -144,10 +140,7 @@ class _ChatPageState extends State<ChatPage> {
             Expanded(
               child: NotificationListener<ScrollNotification>(
                 onNotification: (notification) {
-                  if (!_isLoading &&
-                      notification is ScrollEndNotification &&
-                      _scrollController.position.pixels ==
-                          _scrollController.position.maxScrollExtent) {
+                  if (!_isLoading && notification is ScrollEndNotification && _scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
                     // Scrolled to the top, fetch previous messages
                     if (kDebugMode) {
                       log('scrolled to top, fetch previous messages');
@@ -162,12 +155,8 @@ class _ChatPageState extends State<ChatPage> {
                   itemCount: chatMessages.length,
                   itemBuilder: (ctx, index) {
                     var chatMessage = chatMessages[index];
-                    Alignment alignment = chatMessage.sender == 'User1'
-                        ? Alignment.centerLeft
-                        : Alignment.centerRight;
-                    Color bgColor = chatMessage.sender == 'User1'
-                        ? Colors.orange.shade400
-                        : Colors.purple.shade100;
+                    Alignment alignment = chatMessage.sender == 'User1' ? Alignment.centerLeft : Alignment.centerRight;
+                    Color bgColor = chatMessage.sender == 'User1' ? Colors.orange.shade400 : Colors.purple.shade100;
 
                     return Container(
                       alignment: alignment,
@@ -185,8 +174,7 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                       child: Text(
                         chatMessage.content.toString(),
-                        maxLines:
-                            3, // Maximum number of lines before line wrap occurs
+                        maxLines: 3, // Maximum number of lines before line wrap occurs
                         overflow: TextOverflow.ellipsis,
                       ),
                     );

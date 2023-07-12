@@ -33,7 +33,7 @@ class ChatController extends Controller
                 return response()->json(['errors' => $validator->errors()], 400);
             }
 
-            $user = Auth::user();
+            $user = $request->user();
 
             $senderId = $user->id;
 
@@ -162,7 +162,7 @@ class ChatController extends Controller
     {
         try {
             //code...
-            $user = Auth::user();
+            $user = $request->user();
 
             $validator = Validator::make($request->all(), [
                 'conversation_id' => 'required|int',

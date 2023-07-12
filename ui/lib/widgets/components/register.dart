@@ -2,6 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:ui/screens/home_screen.dart';
+import 'package:ui/services/api/post.dart';
+import 'package:ui/services/helper/common.dart';
+import 'package:ui/services/helper/regexes.dart';
 
 class RegisterWidget extends StatefulWidget {
   const RegisterWidget({super.key});
@@ -16,6 +20,47 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
 
+  final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  _onSubmit(BuildContext context) async {
+    if (kDebugMode) {
+      log("do api call to register");
+    }
+
+    var result = await registerUser(
+        _emailController.text,
+        _userNameController.text,
+        _passwordController.text,
+        _confirmPasswordController.text);
+
+    if (result != null && result["message"] != null) {
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
+    } else {
+      if (result != null &&
+          result["message"] != null &&
+          result["message"].toString().trim() != "") {
+        var snackBar = SnackBar(
+          content: Text(result["message"]),
+          backgroundColor: Colors.black,
+        );
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } else {
+        const snackBar = SnackBar(
+          content: Text("Cannot Register now.\nPlease try later."),
+          backgroundColor: Colors.black,
+        );
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +74,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextFormField(
+                    controller: _userNameController,
                     decoration: InputDecoration(
                       labelText: 'Username',
                       border: OutlineInputBorder(
@@ -44,6 +90,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
+                    controller: _emailController,
                     decoration: InputDecoration(
                       labelText: 'Email',
                       border: OutlineInputBorder(
@@ -54,12 +101,15 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       if (value!.isEmpty) {
                         return 'Please enter an email';
                       }
-                      // Add email validation logic if needed
+                      if (!emailRegex.hasMatch(value)) {
+                        return 'Please enter a valid email';
+                      }
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
+                    controller: _passwordController,
                     obscureText: !_passwordVisible,
                     decoration: InputDecoration(
                       labelText: 'Password',
@@ -81,12 +131,14 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       if (value!.isEmpty) {
                         return 'Please enter a password';
                       }
-                      // Add password validation logic if needed
-                      return null;
+                      var returner = validatePassword(value,
+                          _userNameController.text, _emailController.text);
+                      return returner;
                     },
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
+                    controller: _confirmPasswordController,
                     obscureText: !_confirmPasswordVisible,
                     decoration: InputDecoration(
                       labelText: 'Confirm Password',
@@ -108,7 +160,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       if (value!.isEmpty) {
                         return 'Please confirm the password';
                       }
-                      // Add password confirmation logic if needed
+                      if (value != _passwordController.text) {
+                        return 'Passwords do not match';
+                      }
                       return null;
                     },
                   ),
@@ -121,6 +175,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                         if (kDebugMode) {
                           log('Registration submitted');
                         }
+                        _onSubmit(context);
                       }
                     },
                     child: const Text('Submit'),

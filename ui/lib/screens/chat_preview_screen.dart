@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:ui/widgets/components/chat_list_item.dart';
 
 class ChatsPreviewScreen extends StatefulWidget {
@@ -17,10 +15,7 @@ class _ChatsPreviewScreenState extends State<ChatsPreviewScreen> {
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     final maxHeight = MediaQuery.of(context).size.height * 0.70;
     return Container(
-      height: maxHeight -
-          keyboardHeight -
-          kToolbarHeight -
-          MediaQuery.of(context).padding.top,
+      height: maxHeight - keyboardHeight - kToolbarHeight - MediaQuery.of(context).padding.top,
       width: MediaQuery.of(context).size.width * 0.90,
       padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
       decoration: BoxDecoration(

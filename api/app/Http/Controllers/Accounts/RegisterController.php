@@ -34,13 +34,15 @@ class RegisterController extends Controller
 
         $input = $request->all();
 
-        $isUserNameExists = User::where('name', $input['name'])->get();
-        $isEmailExists = User::where('email', $input['email'])->get();
+        $isUserNameExists = User::where('name', $input['name'])->exists();
+        $isEmailExists = User::where('email', $input['email'])->exists();
 
-        if ($isUserNameExists && !empty($isUserNameExists)) {
+        if ($isUserNameExists) {
+            info($isUserNameExists);
             return response()->json(['message' => 'username is taken'], 500);
         }
-        if ($isEmailExists && !empty($isEmailExists)) {
+        if ($isEmailExists) {
+            info($isEmailExists);
             return response()->json(['message' => 'Account with the provided email already exists'], 500);
         }
 
@@ -75,7 +77,7 @@ class RegisterController extends Controller
     public function login(Request $request)
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user = Auth::user();
+            $user = $request->user();
             $success['token'] = $user->createToken('MyApp')->plainTextToken;
             $success['name'] = $user->name;
 
@@ -92,7 +94,7 @@ class RegisterController extends Controller
      */
     public function logout(Request $request)
     {
-        $user = Auth::user();
+        $user = $request->user();
         $user->tokens()->delete();
 
         return response()->json(['message' => 'Logged out successfully']);
@@ -116,7 +118,7 @@ class RegisterController extends Controller
                 return $this->sendError('Validation Error.', $validator->errors());
             }
 
-            $user = Auth::user();
+            $user = $request->user();
 
             if (!Hash::check($request->current_password, $user->password)) {
                 return $this->sendError('Invalid password.', ['error' => 'Invalid password']);

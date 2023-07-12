@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import '../../models/user.dart';
+// import '../../models/user.dart';
 
 class DataBaseProvider {
   DataBaseProvider._();
@@ -39,6 +39,7 @@ class DataBaseProvider {
   }
 
   Future<Database> get database async {
+    // ignore: unnecessary_null_comparison
     if (_database != null) {
       return _database;
     }
@@ -48,7 +49,6 @@ class DataBaseProvider {
 
   String createUserTable() {
     return "CREATE TABLE User("
-        "userId INTEGER PRIMARY KEY,"
         "userName TEXT NOT NULL,"
         "email TEXT NOT NULL,"
         "loginStatus INTEGER DEFAULT 0,"
@@ -72,12 +72,13 @@ class DataBaseProvider {
   // insert query
 
   // user
-  Future<dynamic> addUser(User user) async {
+  Future<dynamic> addUser(Map<String, Object?> user) async {
     final db = await initDB();
+
     var result = await db.insert(
       'User',
-      user.toMap(),
-      ConflictAlgorithm.replace,
+      user,
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
     if (kDebugMode) {
       log('user add res $result');
@@ -95,6 +96,11 @@ class DataBaseProvider {
         "UPDATE User SET loginStatus = ?, authToken = ? WHERE userName=?;",
         [1, authToken, userName],
       );
+
+      if (kDebugMode) {
+        log("update result makeUserActive ");
+        log(result.toString());
+      }
 
       return {"status": "success"};
     } catch (e) {
@@ -123,6 +129,7 @@ class DataBaseProvider {
         log('error in readActiveUser');
         log(e.toString());
       }
+      return null;
     }
   }
 
@@ -141,6 +148,37 @@ class DataBaseProvider {
         log("error in read user for email");
         log(e.toString());
       }
+    }
+  }
+
+  /// The `dynamicQuery` function executes a dynamic SQL query with optional parameters and returns the
+  /// result.
+  ///
+  /// Args:
+  ///   query (String): The query parameter is a string that represents the SQL query you want to execute.
+  /// It can be any valid SQL statement, such as SELECT, INSERT, UPDATE, or DELETE.
+  ///   params (List<dynamic>): The `params` parameter is a list of dynamic values that will be used as
+  /// parameters in the SQL query. These values can be of any type and will be inserted into the query in
+  /// the order they appear in the list.
+  ///
+  /// Returns:
+  ///   a `Future<dynamic>`.
+  Future<dynamic> dynamicQuery(String query, List<dynamic> params) async {
+    try {
+      final db = await initDB();
+      if (params.isNotEmpty) {
+        final result = await db.rawQuery(query, params);
+        return result;
+      } else {
+        final result = await db.rawQuery(query);
+        return result;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        log('error in running dynamic query');
+        log(e.toString());
+      }
+      return null;
     }
   }
 }
