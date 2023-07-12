@@ -39,6 +39,7 @@ class DataBaseProvider {
   }
 
   Future<Database> get database async {
+    // ignore: unnecessary_null_comparison
     if (_database != null) {
       return _database;
     }
@@ -95,6 +96,11 @@ class DataBaseProvider {
         "UPDATE User SET loginStatus = ?, authToken = ? WHERE userName=?;",
         [1, authToken, userName],
       );
+
+      if (kDebugMode) {
+        log("update result makeUserActive ");
+        log(result.toString());
+      }
 
       return {"status": "success"};
     } catch (e) {

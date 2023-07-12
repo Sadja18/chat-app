@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:ui/screens/chat_page.dart';
 import 'package:ui/screens/first_screen.dart';
 import 'package:ui/screens/home_screen.dart';
+import 'package:ui/screens/privacy_settings_screen.dart';
 import 'package:ui/services/helper/database_helper.dart';
 
-Color primarySwatchCustomColor = Color.fromRGBO(51, 153, 255, 1);
+Color primarySwatchCustomColor = const Color.fromRGBO(51, 153, 255, 1);
 
 MaterialColor customSwatch = MaterialColor(primarySwatchCustomColor.value, {
   50: primarySwatchCustomColor.withOpacity(0.1),
@@ -34,16 +35,13 @@ class MyApp extends StatelessWidget {
     return FutureBuilder(
       future: getActiveUser(),
       builder: (BuildContext ctx, AsyncSnapshot snap) {
-        if (kDebugMode) {
-          log(snap.data.toString());
-        }
-        if (snap.connectionState == ConnectionState.waiting ||
-            snap.connectionState == ConnectionState.active) {
+        if (snap.connectionState == ConnectionState.waiting || snap.connectionState == ConnectionState.active) {
           if (kDebugMode) {
             log("waiting");
           }
           return const SizedBox(child: CircularProgressIndicator.adaptive());
         } else if (snap.data != null &&
+            snap.data is List &&
             snap.data.runtimeType.toString() == "List<Map<String, Object?>>" &&
             snap.data.length > 0 &&
             snap.data[0]['loginStatus'] != null &&
@@ -59,10 +57,11 @@ class MyApp extends StatelessWidget {
             log('first screen showing because');
             log("${snap.data.runtimeType}");
             log("${snap.data.length > 0}");
-            log("${snap.data[0]['loginStatus'] != null}");
-            log("${snap.data[0]['loginStatus'] == 1}");
-            log("${snap.data[0]['authToken'] != null}");
-            log("${snap.data[0]['authToken'].toString().trim() != ''}");
+            log(snap.data.toString());
+            // log("${snap.data[0]['loginStatus'] != null}");
+            // log("${snap.data[0]['loginStatus'] == 1}");
+            // log("${snap.data[0]['authToken'] != null}");
+            // log("${snap.data[0]['authToken'].toString().trim() != ''}");
           }
           return const FirstScreen();
         }
@@ -136,8 +135,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => widgetReturner(),
         FirstScreen.routeName: (context) => const FirstScreen(),
         HomeScreen.routeName: (context) => const HomeScreen(),
-        // ignore: prefer_const_constructors
         ChatPage.routeName: (context) => ChatPage(),
+        PrivacySettingsScreen.routeName: (context) => PrivacySettingsScreen(),
       },
     );
   }

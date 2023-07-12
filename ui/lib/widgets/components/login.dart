@@ -4,6 +4,8 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:ui/screens/home_screen.dart';
+import 'package:ui/services/api/post.dart';
 import 'package:ui/services/helper/regexes.dart';
 
 class LoginWidget extends StatefulWidget {
@@ -20,14 +22,29 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      // Form is valid, perform submission logic
-      // For example, call an API to authenticate the user
-      if (kDebugMode) {
-        log('Form submitted');
+  void _submitForm(BuildContext context) {
+    loginUser(
+      _emailController.text,
+      _passwordController.text,
+    ).then((value) {
+      if (value != null && value is Map && value.containsKey('status') && value['status'] != null && value['status'] == 'success') {
+        const snackBar = SnackBar(
+          content: Text("Login successful.\nLet's Baat Cheet"),
+          backgroundColor: Colors.black,
+        );
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        Future.delayed(const Duration(seconds: 1));
+        Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+      } else {
+        const snackBar = SnackBar(
+          content: Text("Cannot Login now.\nPlease try later or contact admin."),
+          backgroundColor: Colors.black,
+        );
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
-    }
+    });
   }
 
   bool passwordValidator(String val) {
@@ -43,9 +60,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       body: OrientationBuilder(
         builder: (BuildContext context, Orientation orientation) {
           return Center(
-            child: orientation == Orientation.portrait
-                ? buildPortraitLayout()
-                : buildLandscapeLayout(),
+            child: orientation == Orientation.portrait ? buildPortraitLayout() : buildLandscapeLayout(),
           );
         },
       ),
@@ -90,9 +105,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 suffixIcon: IconButton(
-                  icon: Icon(_passwordVisible
-                      ? Icons.visibility
-                      : Icons.visibility_off),
+                  icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
                   onPressed: () {
                     setState(() {
                       _passwordVisible = !_passwordVisible;
@@ -112,7 +125,16 @@ class _LoginWidgetState extends State<LoginWidget> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: _submitForm,
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  // Form is valid, perform submission logic
+                  // For example, call an API to authenticate the user
+                  if (kDebugMode) {
+                    log('Form submitted');
+                  }
+                  _submitForm(context);
+                }
+              },
               child: const Text('Submit'),
             ),
           ],
@@ -143,6 +165,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                     if (value!.isEmpty) {
                       return 'Please enter the login email';
                     }
+                    if (!emailRegex.hasMatch(value)) {
+                      return 'Please enter a valid email';
+                    }
                     return null;
                   },
                 ),
@@ -156,9 +181,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     suffixIcon: IconButton(
-                      icon: Icon(_passwordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off),
+                      icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
                       onPressed: () {
                         setState(() {
                           _passwordVisible = !_passwordVisible;
@@ -178,7 +201,16 @@ class _LoginWidgetState extends State<LoginWidget> {
           ),
           const SizedBox(width: 16),
           ElevatedButton(
-            onPressed: _submitForm,
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                // Form is valid, perform submission logic
+                // For example, call an API to authenticate the user
+                if (kDebugMode) {
+                  log('Form submitted');
+                }
+                _submitForm(context);
+              }
+            },
             child: const Text('Submit'),
           ),
         ],

@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ffi';
 
 import 'package:flutter/foundation.dart';
 import 'package:ui/services/database/local_storage_db.dart';
@@ -131,6 +130,37 @@ Future<dynamic> deleteUserFromLocal(bool all, String fieldName, String fieldVal)
   } catch (e) {
     if (kDebugMode) {
       log("error in logoutUser");
+      log(e.toString());
+    }
+    return null;
+  }
+}
+
+Future<dynamic> getUserDetailsForProfileScreen() async {
+  try {
+    if (kDebugMode) {
+      log("getting user name and email for profile page");
+    }
+    var query = "SELECT userName, email FROM User WHERE loginStatus=1;";
+    var resultQ = await DataBaseProvider.db.dynamicQuery(query, []);
+    if (kDebugMode) {
+      log("resultQ profile screen fetched");
+      log(resultQ.toString());
+    }
+
+    var resultList = resultQ.toList();
+    if (kDebugMode) {
+      log(resultList.toString());
+    }
+
+    if (resultList.isNotEmpty) {
+      return resultList;
+    } else {
+      return [];
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      log("error in gettings profile details for current user");
       log(e.toString());
     }
     return null;

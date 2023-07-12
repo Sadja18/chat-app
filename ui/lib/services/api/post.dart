@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -7,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:ui/services/database/local_storage_db.dart';
 import 'package:ui/models/uri.dart';
+import 'package:ui/services/helper/database_helper.dart';
 
 Future<dynamic> loginUser(String email, String userPassword) async {
   try {
@@ -28,12 +28,21 @@ Future<dynamic> loginUser(String email, String userPassword) async {
       }
 
       var data = jsonDecode(response.body);
-      if (data != null) {
+      if (data != null &&
+          data is Map &&
+          data.containsKey('data') &&
+          data['data'] != null &&
+          data['data'].toString().trim() != "" &&
+          data['data'] is Map &&
+          data['data'].containsKey('token') &&
+          data['data']['token'].toString().trim() != "" &&
+          data['data'].containsKey('name') &&
+          data['data']['name'].toString().trim() != "") {
         if (kDebugMode) {
           log(data.toString());
         }
-        var authToken = data['token'];
-        var userName = data['name'];
+        var authToken = data['data']['token'];
+        var userName = data['data']['name'];
 
         var result = await DataBaseProvider.db.makeUserActive(userName, authToken);
         return result;
@@ -163,16 +172,19 @@ Future<dynamic> logoutUser(bool allUsers) async {
           log("logout user with $authToken");
         }
         if (authToken != null && authToken.toString().trim() != "") {
+          // make api call to backend logout
           var response = await http.post(Uri.parse(logoutUri), headers: {'Authorization': 'Bearer $authToken'});
 
           if (response.statusCode == 200) {
+            // make db call to logout user
+            var email = item['email'];
+            logout(false, email);
           } else {
             if (kDebugMode) {
               log("error in logout ${response.statusCode}");
             }
           }
         }
-        // make api call to backend logout
       }
     } else {
       return null;

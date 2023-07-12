@@ -1,5 +1,7 @@
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+// ignore_for_file: unused_import
+
+import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 class ChatRequestListItem extends StatelessWidget {
   final String requesterUsername;
