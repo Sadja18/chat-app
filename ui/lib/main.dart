@@ -1,7 +1,27 @@
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import 'package:ui/screens/chat_page.dart';
 import 'package:ui/screens/first_screen.dart';
 import 'package:ui/screens/home_screen.dart';
+import 'package:ui/services/helper/database_helper.dart';
+
+Color primarySwatchCustomColor = Color.fromRGBO(51, 153, 255, 1);
+
+MaterialColor customSwatch = MaterialColor(primarySwatchCustomColor.value, {
+  50: primarySwatchCustomColor.withOpacity(0.1),
+  100: primarySwatchCustomColor.withOpacity(0.2),
+  200: primarySwatchCustomColor.withOpacity(0.3),
+  300: primarySwatchCustomColor.withOpacity(0.4),
+  400: primarySwatchCustomColor.withOpacity(0.5),
+  500: primarySwatchCustomColor.withOpacity(0.6),
+  600: primarySwatchCustomColor.withOpacity(0.7),
+  700: primarySwatchCustomColor.withOpacity(0.8),
+  800: primarySwatchCustomColor.withOpacity(0.9),
+  900: primarySwatchCustomColor.withOpacity(1.0),
+});
 
 void main() {
   runApp(const MyApp());
@@ -11,9 +31,43 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   Widget widgetReturner() {
-    return FutureBuilder(builder: (BuildContext ctx, AsyncSnapshot snap) {
-      return const FirstScreen();
-    });
+    return FutureBuilder(
+      future: getActiveUser(),
+      builder: (BuildContext ctx, AsyncSnapshot snap) {
+        if (kDebugMode) {
+          log(snap.data.toString());
+        }
+        if (snap.connectionState == ConnectionState.waiting ||
+            snap.connectionState == ConnectionState.active) {
+          if (kDebugMode) {
+            log("waiting");
+          }
+          return const SizedBox(child: CircularProgressIndicator.adaptive());
+        } else if (snap.data != null &&
+            snap.data.runtimeType.toString() == "List<Map<String, Object?>>" &&
+            snap.data.length > 0 &&
+            snap.data[0]['loginStatus'] != null &&
+            snap.data[0]['loginStatus'] == 1 &&
+            snap.data[0]['authToken'] != null &&
+            snap.data[0]['authToken'].toString().trim() != '') {
+          if (kDebugMode) {
+            log('user logged in');
+          }
+          return const HomeScreen();
+        } else {
+          if (kDebugMode) {
+            log('first screen showing because');
+            log("${snap.data.runtimeType}");
+            log("${snap.data.length > 0}");
+            log("${snap.data[0]['loginStatus'] != null}");
+            log("${snap.data[0]['loginStatus'] == 1}");
+            log("${snap.data[0]['authToken'] != null}");
+            log("${snap.data[0]['authToken'].toString().trim() != ''}");
+          }
+          return const FirstScreen();
+        }
+      },
+    );
   }
 
   // This widget is the root of your application.
@@ -23,9 +77,9 @@ class MyApp extends StatelessWidget {
       title: 'Baat Cheet',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: customSwatch,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color.fromRGBO(48, 63, 159, 1),
+          backgroundColor: Color.fromRGBO(245, 56, 89, 1),
           titleTextStyle: TextStyle(
             color: Color.fromRGBO(255, 255, 255, 1),
             fontSize: 20,
@@ -64,7 +118,7 @@ class MyApp extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.0),
           ),
         ),
-        scaffoldBackgroundColor: const Color.fromRGBO(211, 217, 250, 1),
+        scaffoldBackgroundColor: const Color.fromRGBO(10, 25, 49, 1),
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: Colors.blue,
           selectionHandleColor: Colors.lightBlue.shade300,
@@ -75,6 +129,7 @@ class MyApp extends StatelessWidget {
               fontSizeDelta: 0.5,
               // fontFamily: 'Poppins',
             ),
+        // buttonColor:
       ),
       initialRoute: '/',
       routes: {

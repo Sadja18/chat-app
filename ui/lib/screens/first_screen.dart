@@ -15,6 +15,15 @@ class FirstScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Baat Cheet'),
           bottom: TabBar(
+            indicator: BoxDecoration(
+              border: Border.all(
+                color: Colors.white,
+              ),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            unselectedLabelStyle: const TextStyle(
+              color: Colors.blueGrey,
+            ),
             tabs: [
               Tab(
                 child: Column(
@@ -40,6 +49,7 @@ class FirstScreen extends StatelessWidget {
           ),
         ),
         body: const TabBarView(
+          physics: NeverScrollableScrollPhysics(),
           children: [
             Padding(
               padding: EdgeInsets.all(8.0),
