@@ -74,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
+          backgroundColor: const Color.fromRGBO(255, 109, 52, 1),
         ),
         body: const TabBarView(
           children: [
