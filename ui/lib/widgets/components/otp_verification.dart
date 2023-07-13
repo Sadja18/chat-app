@@ -5,10 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:ui/services/api/post.dart';
 
 class OtpVerificationWidget extends StatefulWidget {
-  // final Function(String?) verificationCallBack;
-  const OtpVerificationWidget({
-    super.key,
-  });
+  final Function(String?) verificationCallBack;
+  const OtpVerificationWidget({super.key, required this.verificationCallBack});
 
   @override
   State<OtpVerificationWidget> createState() => _OtpVerificationWidgetState();
@@ -28,35 +26,19 @@ class _OtpVerificationWidgetState extends State<OtpVerificationWidget> {
       log(value.toString());
     }
     if (value != null && value is Map) {
-      var message = "";
       if (value.containsKey("message")) {
-        message = value["message"].toString();
-
-        // SnackBar snackBar = SnackBar(content: Text(message));
-        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
         Future.delayed(const Duration(milliseconds: 500));
 
         setState(() {
           otpGenerated = true;
         });
       } else if (value.containsKey("error")) {
-        message = value['error'].toString();
-
-        // SnackBar snackBar = SnackBar(content: Text(message));
-        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
         Future.delayed(const Duration(milliseconds: 500));
 
         setState(() {
           otpGenerated = false;
         });
       } else {
-        message = "Unknown error occurred while generating OTP.";
-
-        // SnackBar snackBar = SnackBar(content: Text(message));
-        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
         Future.delayed(const Duration(milliseconds: 500));
 
         setState(() {
@@ -67,10 +49,6 @@ class _OtpVerificationWidgetState extends State<OtpVerificationWidget> {
       if (kDebugMode) {
         log("otp cannot be generated");
       }
-
-      // const snackBar = SnackBar(content: Text("Cannot generate OTP now.\nPlease try again later."));
-      // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
       Future.delayed(const Duration(milliseconds: 500));
 
       setState(() {
@@ -87,6 +65,39 @@ class _OtpVerificationWidgetState extends State<OtpVerificationWidget> {
       return "Please enter the correct OTP";
     }
     return null;
+  }
+
+  Future<void> verifyOtpHandler(String otp) async {
+    var result = await sendRequestToVerifyOTP(otp);
+    if (kDebugMode) {
+      log("result is");
+      log(result.toString());
+    }
+    if (result != null && result is Map) {
+      if (result.containsKey("message") && result['message'] != null) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result['message'].toString())));
+        }
+        Future.delayed(const Duration(milliseconds: 500));
+        widget.verificationCallBack(result["message"].toString());
+      } else {
+        if (result.containsKey("error")) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result['error'].toString().trim())));
+          }
+        } else {
+          if (mounted) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text("Cannot verify OTP.\nPlease try later")));
+          }
+        }
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Cannot verify OTP.\nPlease try later")));
+      }
+    }
   }
 
   @override
@@ -164,13 +175,14 @@ class _OtpVerificationWidgetState extends State<OtpVerificationWidget> {
               }
               _otpFocus.unfocus();
 
-              var value = _otpController.text;
+              var value = _otpController.text.trim();
               if (validator(value) != null) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(validator(value))));
               } else {
                 if (kDebugMode) {
                   log("api call verify otp");
                 }
+                verifyOtpHandler(value.trim());
               }
             },
             child: const Text(

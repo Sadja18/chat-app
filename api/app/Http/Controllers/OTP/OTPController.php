@@ -126,6 +126,9 @@ class OTPController extends Controller
                 // $senderId = $user->id;
                 $storedOTP = OTP::where('user_id', $user->id)->orderBy('created_at', 'desc')->first();
 
+                info("stored otp");
+                info($storedOTP);
+
                 if ($storedOTP && OTPHelper::validateOTP($storedOTP->otp, $otp)) {
                     // Mark the user's email as verified
                     DB::table('users')->where('id', $user->id)->update(['email_verified_at' => now()]);

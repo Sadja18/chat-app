@@ -242,3 +242,48 @@ Future<dynamic> sendRequestToGenerateOTP() async {
   }
   return null;
 }
+
+Future<dynamic> sendRequestToVerifyOTP(String otp) async {
+  try {
+    var authToken = await getAuthTokenForActiveUser();
+
+    if (authToken == null) {
+      return {"error": "Invalid Session.\nPlease log out and log in again"};
+    }
+    if (kDebugMode) {
+      log("api call making to back-end with auth token $authToken to verify email");
+    }
+    var response = await http.post(Uri.parse(verifyOtp),
+        headers: {'Authorization': 'Bearer $authToken', 'Content-Type': 'application/json'},
+        body: jsonEncode(<String, String>{"otp": otp}));
+
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      if (kDebugMode) {
+        log(response.body);
+      }
+      if (body is Map &&
+          body.containsKey('message') &&
+          body['message'] != null &&
+          body['message'].toString().toLowerCase() == 'email verified successfully') {
+        return {'message': body['message'].toString()};
+      } else {
+        return {'error': body["message"]};
+      }
+    } else {
+      var body = jsonDecode(response.body);
+      if (kDebugMode) {
+        log(response.body);
+      }
+      if (body is Map && body.containsKey('message')) {
+        return {'error': body['message']};
+      } else {
+        return {'error': 'Some error occurred.\nPlease contact support.'};
+      }
+    }
+  } catch (e) {
+    log('error in send api call to generate otp');
+    log(e.toString());
+  }
+  return null;
+}

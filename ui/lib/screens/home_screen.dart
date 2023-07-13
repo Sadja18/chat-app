@@ -20,13 +20,29 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   bool showVerificationPage = false;
-  // void otpVerificationCall(String? otp) {}
+  void otpVerificationCallBack(String? verified) {
+    if (verified.toString().trim() != '') {
+      setState(() {
+        showVerificationPage = false;
+      });
+
+      if (kDebugMode) {
+        log("isOtpVerified ${!showVerificationPage}");
+      }
+    }
+  }
 
   void whichWidget() async {
     var result = await checkIfUserEmailIsVerified();
+    if (kDebugMode) {
+      log("result loaded");
+      // log(result.toString());
+      // log("result['verification_status'] == null ${result['verification_status'] == null}");
+      // log("result['verification_status'] is bool ${result['verification_status'] is bool}");
+      // log(result['verification_status'].toString());
+    }
     if (result is Map && !result.containsKey('error') && result.containsKey('verification_status')) {
-      if (result['verification_status'] == null ||
-          (result['verification_status'] is bool && !result['verification_status'])) {
+      if (result['verification_status'] == null || result["verification_status"] is bool) {
         setState(() {
           showVerificationPage = true;
         });
@@ -45,6 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     whichWidget();
+    if (kDebugMode) {
+      log("initstate");
+    }
     super.initState();
   }
 
@@ -57,7 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
               backgroundColor: const Color.fromARGB(255, 184, 116, 27),
               foregroundColor: Colors.white,
             ),
-            body: const OtpVerificationWidget(),
+            body: OtpVerificationWidget(
+              verificationCallBack: otpVerificationCallBack,
+            ),
           )
         : DefaultTabController(
             length: 3,

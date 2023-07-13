@@ -5,7 +5,7 @@ class OTPHelper
 {
     public static function generateOTP($length = 7)
     {
-        $characters = '0123456789ABDEFGHJKLMNPQRTabdefghjklmnpqrt';
+        $characters = '0123456789ABDEFGHJKLMNPQRTabdefghijkmnpqrt';
         $otp = '';
         $max = strlen($characters) - 1;
         for ($i = 0; $i < $length; $i++) {
