@@ -36,6 +36,7 @@ Route::controller(RegisterController::class)->group(function () {
 Route::post('/logout', [RegisterController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::middleware([ThrottleRequests::class . ':5,1'])->group(function () {
+    Route::get('/email/verified', [OTPController::class, 'checkIfEmailIsVerified'])->middleware('auth:sanctum', 'activeUser');
     Route::post('/email/otp', [OTPController::class, 'generateOTP'])->middleware('auth:sanctum');
     Route::post('/email/verify', [OTPController::class, 'verifyEmail'])->middleware('auth:sanctum');
 });

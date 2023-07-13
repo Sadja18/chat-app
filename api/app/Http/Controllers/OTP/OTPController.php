@@ -14,68 +14,141 @@ use Validator;
 
 class OTPController extends Controller
 {
+
+    public function checkIfEmailIsVerified(Request $request)
+    {
+        try {
+            $user = $request->user();
+
+            if ($user) {
+
+                return response()->json(
+                    [
+                        'message' => 'successfully fetched',
+                        'data' => [
+                            'email_verification-status' => $user->email_verified_at ? $user->email_verified_at : false,
+                            // gettype($user)
+                        ]
+                    ],
+                    200
+                );
+            } else {
+                return response()->json(
+                    [
+                        'message' => 'Not found',
+                        'error' => "user not found"
+                    ],
+                    404
+                );
+            }
+        } catch (\Exception $e) {
+            return response()->json(
+                ['message' => 'error occurred in checking if email is verified', 'error' => $e->getMessage()],
+                500
+            );
+        }
+    }
+
+
     public function generateOTP(Request $request)
     {
-        $otp = OTPHelper::generateOTP();
 
-        Log::info("$otp geneated controller");
+        try {
+            $user = $request->user();
+            if ($user) {
+                $otp = OTPHelper::generateOTP();
 
-        $user = $request->user();
+                Log::info("$otp geneated controller");
 
-        Log::info("generate otp controller user fetched");
+                $user = $request->user();
 
-        OTP::create(
-            [
-                'user_id' => $user->id,
-                'otp' => $otp,
-            ]
-        );
+                Log::info("generate otp controller user fetched");
 
-        Log::info("generate otp controller otp row created");
+                OTP::create(
+                    [
+                        'user_id' => $user->id,
+                        'otp' => $otp,
+                    ]
+                );
 
-        $email = $user->email;
+                Log::info("generate otp controller otp row created");
 
-        Log::info('The email is being sent');
-        Log::info("$email :: $otp");
+                $email = $user->email;
 
-        $content = "<div><p>OTP for verification is: <b>$otp</b></p></div>";
-        $subject = "Verification OTP";
+                Log::info('The email is being sent');
+                Log::info("$email :: $otp");
 
-        // $mailerObj = MailHelper();
+                $content = "<div><p>OTP for verification is: <b>$otp</b></p></div>";
+                $subject = "Verification OTP";
 
-        $sentAttempt = EmailHelper::sendEmail($email, $subject, $content);
+                // $mailerObj = MailHelper();
 
-        $status = array_key_exists('message', $sentAttempt) && $sentAttempt['message'] == 'success' ? 200 : 500;
+                $sentAttempt = EmailHelper::sendEmail($email, $subject, $content);
 
-        return response()->json($sentAttempt, $status);
+                $status = array_key_exists('message', $sentAttempt) && $sentAttempt['message'] == 'success' ? 200 : 500;
+
+                return response()->json($sentAttempt, $status);
+            } else {
+                return response()->json(
+                    [
+                        'message' => 'Not found',
+                        'error' => "user not found"
+                    ],
+                    404
+                );
+            }
+        } catch (\Exception $e) {
+            return response()->json(
+                ['message' => 'error occurred in checking if email is verified', 'error' => $e->getMessage()],
+                500
+            );
+        }
     }
 
     public function verifyEmail(Request $request)
     {
-        $otp = $request->input('otp');
+        try {
+            $user = $request->user();
+            if ($user) {
+                $otp = $request->input('otp');
 
-        $validFormat = preg_match('/^[a-zA-Z0-9]{7}$/', $otp);
+                $validFormat = preg_match('/^[a-zA-Z0-9]{7}$/', $otp);
 
-        if (!$validFormat) {
-            return response()->json(['message' => 'Invalid OTP format'], 422);
-        }
+                if (!$validFormat) {
+                    return response()->json(['message' => 'Invalid OTP format'], 422);
+                }
 
-        // Retrieve the stored OTP from the database
-        $user = $request->user();
+                // Retrieve the stored OTP from the database
+                $user = $request->user();
 
-        // $senderId = $user->id;
-        $storedOTP = OTP::where('user_id', $user->id)->orderBy('created_at', 'desc')->first();
+                // $senderId = $user->id;
+                $storedOTP = OTP::where('user_id', $user->id)->orderBy('created_at', 'desc')->first();
 
-        if ($storedOTP && OTPHelper::validateOTP($storedOTP->otp, $otp)) {
-            // Mark the user's email as verified
-            DB::table('users')->where('id', $user->id)->update(['email_verified_at' => now()]);
+                if ($storedOTP && OTPHelper::validateOTP($storedOTP->otp, $otp)) {
+                    // Mark the user's email as verified
+                    DB::table('users')->where('id', $user->id)->update(['email_verified_at' => now()]);
 
-            // Delete the verified OTP from the database
-            $storedOTP->delete();
+                    // Delete the verified OTP from the database
+                    $storedOTP->delete();
 
-            return response()->json(['message' => 'Email verified successfully']);
-        } else {
-            return response()->json(['message' => 'Invalid OTP'], 422);
+                    return response()->json(['message' => 'Email verified successfully']);
+                } else {
+                    return response()->json(['message' => 'Invalid OTP'], 422);
+                }
+            } else {
+                return response()->json(
+                    [
+                        'message' => 'Not found',
+                        'error' => "user not found"
+                    ],
+                    404
+                );
+            }
+        } catch (\Exception $e) {
+            return response()->json(
+                ['message' => 'error occurred in checking if email is verified', 'error' => $e->getMessage()],
+                500
+            );
         }
     }
 }

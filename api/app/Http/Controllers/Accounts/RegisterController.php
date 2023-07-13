@@ -13,9 +13,18 @@ use Validator;
 class RegisterController extends Controller
 {
     /**
-     * Register api
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * The function registers a user by validating the input, checking if the username and email
+     * already exist, encrypting the password, assigning a default role and account state, creating the
+     * user, and returning a success response with a token and name.
+     * 
+     * @param Request request The  parameter is an instance of the Request class, which
+     * represents an HTTP request. It contains all the data and information about the request, such as
+     * the request method, headers, and input data.
+     * 
+     * @return \Illuminate\Http\JsonResponse response with a success message and the user's name and token if the registration is
+     * successful. If there are validation errors, it will return an error message with the validation
+     * errors. If the username or email already exists, it will return an error message indicating
+     * that.
      */
     public function register(Request $request)
     {
@@ -29,7 +38,14 @@ class RegisterController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
+            // return $this->sendError('Validation Error.', $validator->errors());
+            return response()->json(
+                [
+                    "message" => 'Validation error',
+                    "error" => $validator->errors()
+                ],
+                403
+            );
         }
 
         $input = $request->all();
@@ -68,11 +84,17 @@ class RegisterController extends Controller
         return $this->sendResponse($success, 'User register successfully.');
     }
 
-
     /**
-     * Login api
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * The login function attempts to authenticate a user with the provided email and password, and if
+     * successful, generates a token and returns a success response with the token and user's name.
+     * 
+     * @param Request request The  parameter is an instance of the Request class, which
+     * represents an HTTP request. It contains information about the request, such as the request
+     * method, URL, headers, and input data.
+     * 
+     * @return \Illuminate\Http\JsonResponse the authentication attempt is successful, the function will return a response with
+     * the user's token and name, along with a success message. If the authentication attempt fails,
+     * the function will return an error response with the message 'Unauthorised'.
      */
     public function login(Request $request)
     {
@@ -88,9 +110,16 @@ class RegisterController extends Controller
     }
 
     /**
-     * Logout api
+     * The above function logs out the user by deleting all their tokens and returns a JSON response
+     * indicating successful logout.
      * 
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request request The  parameter is an instance of the Request class, which
+     * represents an HTTP request. It contains information about the request such as the request
+     * method, headers, and input data. In this case, it is used to retrieve the authenticated user
+     * making the request.
+     * 
+     * @return \Illuminate\Http\JsonResponse JSON response with a message indicating that the user has been logged out
+     * successfully.
      */
     public function logout(Request $request)
     {
@@ -101,9 +130,18 @@ class RegisterController extends Controller
     }
 
     /**
-     * Change password
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * The function is used to change the password of a user in a PHP application, after validating the
+     * input and checking the current password.
+     * 
+     * @param Request request The  parameter is an instance of the Request class, which
+     * represents an HTTP request. It contains all the data and information about the request, such as
+     * the request method, headers, and input data.
+     * 
+     * @return \Illuminate\Http\JsonResponse response in the form of a JSON object. If the validation fails, it returns an error
+     * message along with the validation errors. If the current password is invalid, it returns an
+     * error message indicating that the password is invalid. If the password change is successful, it
+     * returns an empty array along with a success message. If an exception occurs during the process,
+     * it returns an error message
      */
     public function changePassword(Request $request)
     {
@@ -134,11 +172,15 @@ class RegisterController extends Controller
     }
 
     /**
-     * Forgot Password
+     * The `forgotPassword` function in PHP is used to generate and send an OTP (One-Time Password) to
+     * a user's email address for password reset.
      * 
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request request The  parameter is an instance of the Request class, which
+     * contains the data and information sent by the client in the HTTP request. In this case, it is
+     * used to retrieve the email entered by the user.
+     * 
+     * @return \Illuminate\Http\JsonResponse response with an empty array and a message "OTP sent to the registered email address."
      */
-
     public function forgotPassword(Request $request)
     {
         try {
@@ -164,14 +206,28 @@ class RegisterController extends Controller
             // $user->otp_verified = false;
             // $user->save();
 
-            // return $t
-
-            return $this->sendResponse([], 'OTP sent to the registered email address.');
+            return response()->json(
+                [
+                    'message' => 'OTP sent to the registered email address.'
+                ],
+                200
+            );
         } catch (\Exception $e) {
             return $this->sendError('An error occurred.', ['error' => $e->getMessage()]);
         }
     }
 
+    /**
+     * The function changes the password for a user with admin access and sends a response indicating
+     * the success of the operation.
+     * 
+     * @param Request request The  parameter is an instance of the Request class, which is used
+     * to retrieve data from the HTTP request. In this case, it is used to retrieve the email and
+     * newPassword values from the request.
+     * 
+     * @return \Illuminate\Http\JsonResponse response with an empty array and a message indicating that the password has been
+     * changed for the specified user by an admin.
+     */
     public function changePasswordUsingAdminAccess(Request $request)
     {
         $email = $request->email;
@@ -187,6 +243,10 @@ class RegisterController extends Controller
         $user->password = $encryptedHash;
         $user->save();
 
-        return $this->sendResponse([], "Password changed for $user->name by admin");
+        return response()->json([
+            "message" => "Password changed for $user->name by admin",
+        ], 200);
+
+        // return $this->sendResponse([], );
     }
 }
