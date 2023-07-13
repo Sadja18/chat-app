@@ -125,13 +125,14 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('username'),
+        backgroundColor: const Color.fromRGBO(63, 81, 181, 1),
       ),
       body: Container(
         alignment: Alignment.topLeft,
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height * 0.95,
-        decoration: BoxDecoration(
-          color: Colors.blue.shade100,
+        decoration: const BoxDecoration(
+          color: Color.fromRGBO(240, 240, 240, 1),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -156,13 +157,25 @@ class _ChatPageState extends State<ChatPage> {
                   itemBuilder: (ctx, index) {
                     var chatMessage = chatMessages[index];
                     Alignment alignment = chatMessage.sender == 'User1' ? Alignment.centerLeft : Alignment.centerRight;
-                    Color bgColor = chatMessage.sender == 'User1' ? Colors.orange.shade400 : Colors.purple.shade100;
+
+                    // User Message background color: Blue Gray
+                    // Other User Message background color: Light Silver
+                    Color bgColor = chatMessage.sender == 'User1' ? const Color.fromRGBO(207, 216, 220, 1) : const Color.fromRGBO(229, 229, 229, 1);
+                    double leftMargin = chatMessage.sender == "User1" ? 5.0 : 40.0;
+                    double rightMargin = chatMessage.sender == "User1" ? 40.0 : 5.0;
 
                     return Container(
                       alignment: alignment,
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 6.0,
-                        horizontal: 10.0,
+                      // width: MediaQuery.of(context).size.width*0.70,
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.60,
+                        minWidth: MediaQuery.of(context).size.width * 0.10,
+                      ),
+                      margin: EdgeInsets.only(
+                        top: 6.0,
+                        bottom: 6.0,
+                        left: leftMargin,
+                        right: rightMargin,
                       ),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 10.0,
@@ -170,12 +183,15 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                       decoration: BoxDecoration(
                         color: bgColor,
+                        border: Border.all(
+                          color: Colors.black,
+                        ),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
                         chatMessage.content.toString(),
-                        maxLines: 3, // Maximum number of lines before line wrap occurs
                         overflow: TextOverflow.ellipsis,
+                        softWrap: true,
                       ),
                     );
                   },

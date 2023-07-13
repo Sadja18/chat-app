@@ -18,16 +18,16 @@ class _ChatsPreviewScreenState extends State<ChatsPreviewScreen> {
       height: maxHeight - keyboardHeight - kToolbarHeight - MediaQuery.of(context).padding.top,
       width: MediaQuery.of(context).size.width * 0.90,
       padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         // color: Colors.amber.shade200,
-        color: Colors.purple.shade200,
+        color: Color.fromRGBO(102, 153, 102, 1),
       ),
       alignment: Alignment.topCenter,
       child: Column(
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.lightBlue.shade100,
+              color: const Color.fromRGBO(191, 212, 191, 1),
               borderRadius: BorderRadius.circular(10),
             ),
             height: MediaQuery.of(context).size.height * 0.05,

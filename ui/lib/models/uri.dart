@@ -17,6 +17,9 @@ const logoutUri = "$baseUri/logout";
 
 // email otp verification routes
 
+// request method get
+const isEmailVerified = "$baseUri/email/verified";
+
 // request method post
 const emailOtpGen = "$baseUri/email/otp";
 // request method post

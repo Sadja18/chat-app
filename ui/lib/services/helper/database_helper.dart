@@ -166,3 +166,22 @@ Future<dynamic> getUserDetailsForProfileScreen() async {
     return null;
   }
 }
+
+Future<dynamic> updateFieldInTable(String tableName, String fieldName, dynamic fieldVal) async {
+  try {
+    if (kDebugMode) {
+      log('updating');
+      log("table: $tableName, field: $fieldName, val: $fieldVal");
+    }
+    var query = "UPDATE $tableName SET $fieldName=?;";
+    var params = [fieldVal];
+    var result = await DataBaseProvider.db.dynamicQuery(query, params);
+    return result;
+  } catch (e) {
+    if (kDebugMode) {
+      log('error in updatedFieldInTable');
+      log(e.toString());
+    }
+    return null;
+  }
+}
