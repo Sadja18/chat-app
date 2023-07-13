@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:ui/models/error_codes.dart';
 
 import 'package:ui/services/database/local_storage_db.dart';
 import 'package:ui/models/uri.dart';
@@ -78,7 +79,12 @@ Future<dynamic> registerUser(String email, String userName, String password, Str
     var response = await http.post(
       Uri.parse(registerUri),
       headers: <String, String>{'Content-Type': 'application/json'},
-      body: jsonEncode(<String, String>{"name": userName, "email": email, "password": password, "confirm_password": confirmPassword}),
+      body: jsonEncode(<String, String>{
+        "name": userName,
+        "email": email,
+        "password": password,
+        "confirm_password": confirmPassword
+      }),
     );
     if (kDebugMode) {
       log("registerUser response received");
@@ -110,7 +116,8 @@ Future<dynamic> registerUser(String email, String userName, String password, Str
 
         // var userMap = LinkedHashMap<String, Object?>.from(user);
 
-        var dbSaveStatus = await DataBaseProvider.db.addUser(<String, Object?>{'userName': userName, 'email': email, 'authToken': token, 'loginStatus': 1});
+        var dbSaveStatus = await DataBaseProvider.db
+            .addUser(<String, Object?>{'userName': userName, 'email': email, 'authToken': token, 'loginStatus': 1});
 
         if (dbSaveStatus != null && dbSaveStatus.toString().trim() != "") {
           return {"message": "Registration Successful"};
@@ -195,4 +202,88 @@ Future<dynamic> logoutUser(bool allUsers) async {
       log(e.toString());
     }
   }
+}
+
+Future<dynamic> sendRequestToGenerateOTP() async {
+  try {
+    var authToken = await getAuthTokenForActiveUser();
+
+    if (authToken == null) {
+      return {"error": "Invalid Session.\nPlease log out and log in again"};
+    }
+    if (kDebugMode) {
+      log("api call making to back-end with auth token $authToken");
+    }
+    var response = await http.post(Uri.parse(emailOtpGen),
+        headers: {'Authorization': 'Bearer $authToken', 'Content-Type': 'application/json'});
+
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      if (body is Map &&
+          body.containsKey('message') &&
+          body.containsKey('info') &&
+          body['message'] != null &&
+          body['message'].toString().toLowerCase() == 'success') {
+        return {'message': body['info'].toString()};
+      } else {
+        return {'error': errorCodes['HTTP500']};
+      }
+    } else {
+      var body = jsonDecode(response.body);
+      if (body is Map && body.containsKey('error')) {
+        return {'error': body['error']};
+      } else {
+        return {'error': 'Some error occurred.\nPlease contact support.'};
+      }
+    }
+  } catch (e) {
+    log('error in send api call to generate otp');
+    log(e.toString());
+  }
+  return null;
+}
+
+Future<dynamic> sendRequestToVerifyOTP(String otp) async {
+  try {
+    var authToken = await getAuthTokenForActiveUser();
+
+    if (authToken == null) {
+      return {"error": "Invalid Session.\nPlease log out and log in again"};
+    }
+    if (kDebugMode) {
+      log("api call making to back-end with auth token $authToken to verify email");
+    }
+    var response = await http.post(Uri.parse(verifyOtp),
+        headers: {'Authorization': 'Bearer $authToken', 'Content-Type': 'application/json'},
+        body: jsonEncode(<String, String>{"otp": otp}));
+
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      if (kDebugMode) {
+        log(response.body);
+      }
+      if (body is Map &&
+          body.containsKey('message') &&
+          body['message'] != null &&
+          body['message'].toString().toLowerCase() == 'email verified successfully') {
+        return {'message': body['message'].toString()};
+      } else {
+        return {'error': body["message"]};
+      }
+    } else {
+      var body = jsonDecode(response.body);
+      if (kDebugMode) {
+        log(response.body);
+      }
+      if (body is Map && body.containsKey('message')) {
+        return {'error': body['message']};
+      } else {
+        return {'error': 'Some error occurred.\nPlease contact support.'};
+      }
+    }
+  } catch (e) {
+    log('error in send api call to generate otp');
+    log(e.toString());
+  }
+  return null;
 }

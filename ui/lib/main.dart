@@ -135,8 +135,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => widgetReturner(),
         FirstScreen.routeName: (context) => const FirstScreen(),
         HomeScreen.routeName: (context) => const HomeScreen(),
-        ChatPage.routeName: (context) => ChatPage(),
-        PrivacySettingsScreen.routeName: (context) => PrivacySettingsScreen(),
+        ChatPage.routeName: (context) => const ChatPage(),
+        PrivacySettingsScreen.routeName: (context) => const PrivacySettingsScreen(),
       },
     );
   }
