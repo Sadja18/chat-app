@@ -10,8 +10,17 @@ class OtpVerificationWidget extends StatefulWidget {
 }
 
 class _OtpVerificationWidgetState extends State<OtpVerificationWidget> {
+  bool otpGenerated = false;
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      alignment: Alignment.center,
+      width: MediaQuery.of(context).size.width * 0.65,
+      margin: const EdgeInsets.symmetric(horizontal: 5.0),
+      child: Row(
+        children: [],
+      ),
+    );
   }
 }

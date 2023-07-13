@@ -27,7 +27,7 @@ class EmailHelper extends Controller
 
             Log::info("$mail->Host $mail->Username $mail->SMTPAuth $mail->Password $mail->SMTPSecure $mail->Port");
 
-            $mail->setFrom('no-reply@baatcheet.com', 'no-reply');
+            $mail->setFrom('no-reply@baatcheet.com', 'Baat-Cheet');
             $mail->addAddress($receiver);
             // $mail->addCC(emailCc);
             // $mail->addBCC(emailBcc);
