@@ -18,9 +18,14 @@ class _OtpVerificationWidgetState extends State<OtpVerificationWidget> {
       alignment: Alignment.center,
       width: MediaQuery.of(context).size.width * 0.65,
       margin: const EdgeInsets.symmetric(horizontal: 5.0),
-      child: Row(
-        children: [],
-      ),
+      child: !otpGenerated
+          ? ElevatedButton(
+              onPressed: () {},
+              child: const Text('Generate OTP'),
+            )
+          : Row(
+              children: [const Text('The OTP has been sent to your email account.\Check your inbox(or spam) for email from')],
+            ),
     );
   }
 }

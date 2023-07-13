@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:ui/models/error_codes.dart';
 
 import 'package:ui/services/database/local_storage_db.dart';
 import 'package:ui/models/uri.dart';
@@ -195,4 +196,33 @@ Future<dynamic> logoutUser(bool allUsers) async {
       log(e.toString());
     }
   }
+}
+
+Future<dynamic> sendRequestToGenerateOTP(String authToken) async {
+  try {
+    if (kDebugMode) {
+      log("api call making to back-end with auth token $authToken");
+    }
+    var response = await http.post(Uri.parse(emailOtpGen), headers: {'Authorization': 'Bearer $authToken', 'Content-Type': 'application/json'});
+
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      if (body is Map && body.containsKey('message') && body.containsKey('info') && body['message'] != null && body['message'].toString().toLowerCase() == 'success') {
+        return {'message': body['info'].toString()};
+      } else {
+        return {'error': errorCodes['HTTP500']};
+      }
+    } else {
+      var body = jsonDecode(response.body);
+      if (body is Map && body.containsKey('error')) {
+        return {'error': body['error']};
+      } else {
+        return {'error': 'Some error occurred.\nPlease contact support.'};
+      }
+    }
+  } catch (e) {
+    log('error in send api call to generate otp');
+    log(e.toString());
+  }
+  return null;
 }
