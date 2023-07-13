@@ -136,6 +136,11 @@ Future<dynamic> deleteUserFromLocal(bool all, String fieldName, String fieldVal)
   }
 }
 
+/// The function `getUserDetailsForProfileScreen` retrieves the user's name and email from the database
+/// for the profile screen.
+///
+/// Returns:
+///   a Future<dynamic> object.
 Future<dynamic> getUserDetailsForProfileScreen() async {
   try {
     if (kDebugMode) {
@@ -167,6 +172,19 @@ Future<dynamic> getUserDetailsForProfileScreen() async {
   }
 }
 
+/// The function `updateFieldInTable` updates a specific field in a table with a given value.
+///
+/// Args:
+///   tableName (String): The tableName parameter is a string that represents the name of the table in
+/// the database where the field needs to be updated.
+///   fieldName (String): The `fieldName` parameter is a string that represents the name of the field in
+/// the table that you want to update.
+///   fieldVal (dynamic): The parameter `fieldVal` is a dynamic type, which means it can accept any type
+/// of value. It can be a string, number, boolean, list, map, or even an object. The value of `fieldVal`
+/// will be used to update the field in the specified table.
+///
+/// Returns:
+///   a `Future<dynamic>`.
 Future<dynamic> updateFieldInTable(String tableName, String fieldName, dynamic fieldVal) async {
   try {
     if (kDebugMode) {
@@ -180,6 +198,48 @@ Future<dynamic> updateFieldInTable(String tableName, String fieldName, dynamic f
   } catch (e) {
     if (kDebugMode) {
       log('error in updatedFieldInTable');
+      log(e.toString());
+    }
+    return null;
+  }
+}
+
+Future<dynamic> getAuthTokenForActiveUser() async {
+  try {
+    if (kDebugMode) {
+      log("getting auth token for currently active user");
+    }
+
+    var query = "SELECT authToken FROM User WHERE authToken IS NOT NULL AND loginStatus=?;";
+    var params = [
+      1,
+    ];
+
+    var resultQ = await DataBaseProvider.db.dynamicQuery(query, params);
+
+    var results = resultQ.toList();
+
+    if (results.isNotEmpty &&
+        results[0] is Map &&
+        results[0].containsKey('authToken') &&
+        results[0]['authToken'] != null &&
+        results[0]['authToken'].toString().trim() != "") {
+      var token = results[0]['authToken'];
+
+      if (kDebugMode) {
+        log("auth token is $token");
+      }
+
+      return token;
+    } else {
+      if (kDebugMode) {
+        log("auth token cannot be found");
+      }
+      return null;
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      log("error in get auth token for currently active user");
       log(e.toString());
     }
     return null;
