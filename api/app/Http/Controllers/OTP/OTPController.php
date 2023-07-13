@@ -22,11 +22,13 @@ class OTPController extends Controller
 
             if ($user) {
 
+                $verification_status = $user->email_verified_at ? $user->email_verified_at : false;
+
                 return response()->json(
                     [
                         'message' => 'successfully fetched',
                         'data' => [
-                            'email_verification-status' => $user->email_verified_at ? $user->email_verified_at : false,
+                            'email_verification_status' => $verification_status,
                             // gettype($user)
                         ]
                     ],

@@ -30,6 +30,10 @@ class PopMenuButton extends StatelessWidget {
             value: 'logout',
             child: Text('Logout'),
           ),
+          PopupMenuItem(
+            value: 'dummy',
+            child: Text('Dummy'),
+          ),
         ];
       },
       onSelected: (selection) {
@@ -72,6 +76,36 @@ class PopMenuButton extends StatelessWidget {
               }
               Navigator.of(context).pushNamedAndRemoveUntil(FirstScreen.routeName, (route) => false);
             });
+            break;
+
+          case 'dummy':
+            if (kDebugMode) {
+              log('this function is to run dummy functions during dev phase.\nRemove before production');
+              // get active user from db.
+              getActiveUser().then((value) {
+                if (kDebugMode) {
+                  log("test code");
+                  log("value");
+                  log(value.toString());
+                }
+              }).catchError((err) {
+                if (kDebugMode) {
+                  log(err.toString());
+                }
+              });
+              // updateFieldInTable('User', 'email', 'mishranaman007@gmail.com').then((value) {
+              //   if (kDebugMode) {
+              //     log("test code update field");
+              //     log("value");
+              //     log(value.toString());
+              //   }
+              // }).catchError((err) {
+              //   if (kDebugMode) {
+              //     log(err.toString());
+              //   }
+              // });
+            }
+
             break;
 
           default:
