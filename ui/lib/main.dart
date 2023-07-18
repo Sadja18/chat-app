@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:ui/screens/capture_profile_pic.dart';
 
 import 'package:ui/screens/chat_page.dart';
 import 'package:ui/screens/first_screen.dart';
@@ -137,6 +138,7 @@ class MyApp extends StatelessWidget {
         HomeScreen.routeName: (context) => const HomeScreen(),
         ChatPage.routeName: (context) => const ChatPage(),
         PrivacySettingsScreen.routeName: (context) => const PrivacySettingsScreen(),
+        CaptureProfilePicScreen.routeName: (context) => const CaptureProfilePicScreen(),
       },
     );
   }

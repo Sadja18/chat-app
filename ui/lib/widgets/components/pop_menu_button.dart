@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:ui/screens/capture_profile_pic.dart';
 import 'package:ui/screens/first_screen.dart';
 import 'package:ui/screens/privacy_settings_screen.dart';
 import 'package:ui/services/helper/database_helper.dart';
@@ -29,6 +30,10 @@ class PopMenuButton extends StatelessWidget {
           PopupMenuItem(
             value: 'logout',
             child: Text('Logout'),
+          ),
+          PopupMenuItem(
+            value: 'capture_profile_pic',
+            child: Text('Capture Profile Pic'),
           ),
           PopupMenuItem(
             value: 'dummy',
@@ -76,6 +81,13 @@ class PopMenuButton extends StatelessWidget {
               }
               Navigator.of(context).pushNamedAndRemoveUntil(FirstScreen.routeName, (route) => false);
             });
+            break;
+
+          case 'capture_profile_pic':
+            if (kDebugMode) {
+              log("image capture page");
+            }
+            Navigator.of(context).pushNamed(CaptureProfilePicScreen.routeName);
             break;
 
           case 'dummy':
